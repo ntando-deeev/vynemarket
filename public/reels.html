@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Reels — VyneMarket</title>
+<link rel="stylesheet" href="style.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ── Page layout ── */
+.reels-page { padding: 0; background: var(--bg); min-height: 100vh; }
+.reels-layout { display: flex; gap: 0; max-width: 1100px; margin: 0 auto; padding: 80px 16px 40px; }
+
+/* ── Feed column ── */
+.reels-feed { flex: 1; max-width: 420px; margin: 0 auto; }
+.reels-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.reels-header h1 { font-size: 1.5rem; font-weight: 800; }
+.upload-btn { background: var(--brand); color: #fff; font-weight: 700; font-size: 0.88rem; padding: 10px 20px; border-radius: 50px; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s, transform 0.15s; }
+.upload-btn:hover { background: var(--brand-dark); transform: translateY(-1px); }
+
+/* ── Reel card ── */
+.reel-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin-bottom: 24px; position: relative; }
+.reel-video-wrap { position: relative; width: 100%; aspect-ratio: 9/16; background: #000; cursor: pointer; }
+.reel-video-wrap video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.reel-play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.25); opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+.reel-video-wrap:hover .reel-play-overlay { opacity: 1; }
+.reel-play-icon { width: 56px; height: 56px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+.reel-play-icon svg { width: 24px; height: 24px; fill: #fff; margin-left: 4px; }
+.reel-actions-side { position: absolute; right: 14px; bottom: 80px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.reel-action-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
+.reel-action-btn .icon { width: 44px; height: 44px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(6px); font-size: 1.3rem; transition: background 0.2s, transform 0.15s; border: none; cursor: pointer; }
+.reel-action-btn .icon:hover { background: rgba(255,255,255,0.25); transform: scale(1.1); }
+.reel-action-btn .icon.liked { background: rgba(236,72,153,0.4); }
+.reel-action-btn span { font-size: 0.75rem; font-weight: 600; }
+.reel-info { position: absolute; bottom: 0; left: 0; right: 60px; padding: 14px 16px; background: linear-gradient(transparent, rgba(0,0,0,0.75)); }
+.reel-author { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.reel-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--brand); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 0.85rem; flex-shrink: 0; overflow: hidden; border: 2px solid rgba(255,255,255,0.3); }
+.reel-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.reel-author-name { font-weight: 700; font-size: 0.9rem; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
+.reel-caption { font-size: 0.85rem; color: rgba(255,255,255,0.9); text-shadow: 0 1px 3px rgba(0,0,0,0.8); line-height: 1.4; }
+.reel-listing-tag { display: inline-flex; align-items: center; gap: 5px; background: rgba(124,58,237,0.5); color: #fff; font-size: 0.75rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-top: 6px; backdrop-filter: blur(4px); cursor: pointer; border: 1px solid rgba(124,58,237,0.6); }
+.reel-meta-bar { padding: 12px 16px; display: flex; align-items: center; gap: 16px; font-size: 0.82rem; color: var(--text-muted); border-top: 1px solid var(--border); }
+.reel-meta-bar span { display: flex; align-items: center; gap: 4px; }
+
+/* ── Comments panel ── */
+.comments-panel { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-top: -12px; margin-bottom: 24px; display: none; }
+.comments-panel.open { display: block; }
+.comments-panel h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 14px; }
+.comment-form { display: flex; gap: 10px; margin-bottom: 16px; }
+.comment-form input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 50px; padding: 10px 16px; color: var(--text); font-family: inherit; font-size: 0.88rem; }
+.comment-form input:focus { outline: none; border-color: var(--brand); }
+.comment-form button { background: var(--brand); color: #fff; border: none; border-radius: 50px; padding: 10px 18px; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+.comment-item { display: flex; gap: 10px; margin-bottom: 12px; }
+.comment-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--brand); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: #fff; flex-shrink: 0; overflow: hidden; }
+.comment-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.comment-body { background: var(--surface); border-radius: 12px; padding: 8px 12px; flex: 1; }
+.comment-author { font-size: 0.8rem; font-weight: 700; color: var(--brand); margin-bottom: 2px; }
+.comment-text { font-size: 0.85rem; color: var(--text); }
+.comment-time { font-size: 0.72rem; color: var(--text-dim); margin-top: 4px; }
+.no-comments { color: var(--text-muted); font-size: 0.88rem; text-align: center; padding: 16px 0; }
+
+/* ── Upload modal ── */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(6px); }
+.modal-overlay.hidden { display: none; }
+.modal-box { background: var(--card); border: 1px solid var(--border2); border-radius: 24px; padding: 32px; width: 100%; max-width: 480px; }
+.modal-box h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: 6px; }
+.modal-box p { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 24px; }
+.drop-zone { border: 2px dashed var(--border2); border-radius: 16px; padding: 40px 20px; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; }
+.drop-zone:hover, .drop-zone.drag-over { border-color: var(--brand); background: rgba(124,58,237,0.06); }
+.drop-zone .dz-icon { font-size: 2.5rem; margin-bottom: 10px; }
+.drop-zone p { color: var(--text-muted); font-size: 0.88rem; margin: 0; }
+.drop-zone p strong { color: var(--brand); }
+#file-input { display: none; }
+.video-preview-wrap { margin-top: 14px; border-radius: 12px; overflow: hidden; background: #000; }
+.video-preview-wrap video { width: 100%; max-height: 240px; object-fit: contain; display: block; }
+.modal-field { margin-top: 16px; }
+.modal-field label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
+.modal-field input, .modal-field textarea, .modal-field select { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 11px 14px; color: var(--text); font-family: inherit; font-size: 0.9rem; }
+.modal-field input:focus, .modal-field textarea:focus, .modal-field select:focus { outline: none; border-color: var(--brand); }
+.modal-field textarea { resize: vertical; min-height: 72px; }
+.modal-actions { display: flex; gap: 10px; margin-top: 24px; }
+.modal-actions .btn-cancel { flex: 1; padding: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 50px; color: var(--text); font-weight: 600; cursor: pointer; }
+.modal-actions .btn-post { flex: 2; padding: 12px; background: var(--brand); color: #fff; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+.modal-actions .btn-post:hover { background: var(--brand-dark); }
+.modal-actions .btn-post:disabled { opacity: 0.5; cursor: not-allowed; }
+.upload-progress { display: none; margin-top: 12px; }
+.upload-progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.upload-progress-bar-fill { height: 100%; background: var(--brand); border-radius: 3px; transition: width 0.3s; width: 0%; }
+.upload-progress-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 6px; text-align: center; }
+
+/* ── Empty / loading states ── */
+.empty-state { text-align: center; padding: 80px 20px; }
+.empty-state .es-icon { font-size: 3.5rem; margin-bottom: 16px; }
+.empty-state h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+.empty-state p { color: var(--text-muted); font-size: 0.9rem; }
+.spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--brand); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 60px auto; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.load-more-btn { width: 100%; padding: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 50px; color: var(--text-muted); font-weight: 600; cursor: pointer; margin-top: 8px; transition: background 0.2s, color 0.2s; }
+.load-more-btn:hover { background: var(--card-hover); color: var(--text); }
+
+/* ── Auth gate ── */
+.auth-gate-inline { background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.25); border-radius: 12px; padding: 14px 18px; font-size: 0.88rem; color: var(--text-muted); text-align: center; }
+.auth-gate-inline a { color: var(--brand); font-weight: 700; }
+
+@media(max-width: 600px){
+  .reels-layout { padding: 72px 8px 40px; }
+  .modal-box { padding: 24px 18px; }
+}
+</style>
+</head>
+<body>
+<nav class="nav scrolled">
+  <div class="nav-inner">
+    <a href="/" class="logo"><span class="logo-icon">✦</span><span class="logo-text">VyneMarket</span></a>
+    <ul class="nav-links">
+      <li><a href="/listings.html">Browse</a></li>
+      <li><a href="/reels.html" style="color:var(--brand)">🎬 Reels</a></li>
+      <li><a href="/dashboard.html">Dashboard</a></li>
+    </ul>
+    <div class="nav-cta" id="nav-cta">
+      <a href="/post-ad.html" class="btn-primary">+ List Business</a>
+      <button class="btn-ghost" onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+</nav>
+
+<div class="reels-page">
+  <div class="reels-layout">
+    <div class="reels-feed">
+      <div class="reels-header">
+        <h1>🎬 Reels</h1>
+        <button class="upload-btn" id="open-upload-btn" onclick="openUpload()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Post Reel
+        </button>
+      </div>
+
+      <div id="auth-gate-banner" class="auth-gate-inline" style="display:none;margin-bottom:20px">
+        <a href="/login.html">Sign in</a> or <a href="/register.html">create an account</a> to post your own reels.
+      </div>
+
+      <div id="feed-loading" class="spinner"></div>
+      <div id="feed-container"></div>
+      <button id="load-more-btn" class="load-more-btn" style="display:none" onclick="loadMore()">Load more reels</button>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Modal -->
+<div class="modal-overlay hidden" id="upload-modal">
+  <div class="modal-box">
+    <h2>📹 Post a Reel</h2>
+    <p>Share a short video with the VyneMarket community. MP4, MOV, or WebM — up to 200 MB.</p>
+
+    <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+      <div class="dz-icon">🎬</div>
+      <p><strong>Click to choose a video</strong><br>or drag and drop here</p>
+    </div>
+    <input type="file" id="file-input" accept="video/mp4,video/quicktime,video/webm" onchange="handleFileSelect(this)"/>
+
+    <div class="video-preview-wrap" id="video-preview-wrap" style="display:none">
+      <video id="video-preview" controls muted></video>
+    </div>
+
+    <div class="modal-field">
+      <label>Caption (optional)</label>
+      <textarea id="reel-caption" placeholder="Tell people what this is about…" maxlength="300"></textarea>
+    </div>
+
+    <div class="modal-field" id="listing-field" style="display:none">
+      <label>Tag a Listing (optional)</label>
+      <select id="reel-listing">
+        <option value="">No listing tag</option>
+      </select>
+    </div>
+
+    <div class="upload-progress" id="upload-progress">
+      <div class="upload-progress-bar"><div class="upload-progress-bar-fill" id="progress-fill"></div></div>
+      <div class="upload-progress-label" id="progress-label">Uploading…</div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeUpload()">Cancel</button>
+      <button class="btn-post" id="post-btn" onclick="postReel()" disabled>Post Reel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = '';
+let token = localStorage.getItem('token');
+let currentUser = null;
+let selectedFile = null;
+let offset = 0;
+const LIMIT = 8;
+let totalReels = 0;
+
+// ── Auth ──────────────────────────────────────────────
+async function initAuth(){
+  if(!token){ showAuthGate(); return; }
+  try{
+    const r = await fetch(`${API}/api/auth/me`, { headers:{ Authorization:`Bearer ${token}` } });
+    if(r.ok){ currentUser = await r.json(); }
+    else { token=null; showAuthGate(); }
+  }catch{ token=null; showAuthGate(); }
+}
+function showAuthGate(){
+  document.getElementById('auth-gate-banner').style.display='block';
+  document.getElementById('open-upload-btn').style.display='none';
+  // hide sign out btn
+  const nav=document.getElementById('nav-cta');
+  if(nav) nav.innerHTML='<a href="/login.html" class="btn-primary">Sign In</a><a href="/register.html" class="btn-ghost">Register</a>';
+}
+function logout(){ localStorage.removeItem('token'); location.href='/login.html'; }
+
+// ── Feed ─────────────────────────────────────────────
+async function loadFeed(append=false){
+  if(!append) document.getElementById('feed-loading').style.display='block';
+  try{
+    const headers = token ? { Authorization:`Bearer ${token}` } : {};
+    const r = await fetch(`${API}/api/reels/feed?limit=${LIMIT}&offset=${offset}`, { headers });
+    const data = await r.json();
+    totalReels = data.total;
+    document.getElementById('feed-loading').style.display='none';
+    if(!append) document.getElementById('feed-container').innerHTML='';
+    if(data.reels.length===0 && !append){
+      document.getElementById('feed-container').innerHTML=`
+        <div class="empty-state">
+          <div class="es-icon">🎬</div>
+          <h3>No reels yet</h3>
+          <p>Be the first to share a video with the community!</p>
+        </div>`;
+      return;
+    }
+    data.reels.forEach(reel => renderReel(reel));
+    offset += data.reels.length;
+    const lmBtn = document.getElementById('load-more-btn');
+    lmBtn.style.display = offset < totalReels ? 'block' : 'none';
+  }catch(e){ console.error(e); document.getElementById('feed-loading').style.display='none'; }
+}
+
+function loadMore(){ loadFeed(true); }
+
+function timeSince(dateStr){
+  const secs = Math.floor((new Date()-new Date(dateStr))/1000);
+  if(secs<60) return 'just now';
+  if(secs<3600) return `${Math.floor(secs/60)}m ago`;
+  if(secs<86400) return `${Math.floor(secs/3600)}h ago`;
+  return `${Math.floor(secs/86400)}d ago`;
+}
+
+function fmtNum(n){ return n>=1000 ? (n/1000).toFixed(1)+'k' : n; }
+
+function renderReel(reel){
+  const container = document.getElementById('feed-container');
+  const div = document.createElement('div');
+  div.className = 'reel-card';
+  div.id = `reel-${reel.id}`;
+
+  const initials = (reel.authorName||'U').charAt(0).toUpperCase();
+  const avatarHTML = reel.authorAvatar
+    ? `<div class="reel-avatar"><img src="${reel.authorAvatar}" alt="${reel.authorName}"/></div>`
+    : `<div class="reel-avatar">${initials}</div>`;
+
+  const listingTag = reel.listingId
+    ? `<div class="reel-listing-tag" onclick="window.location='/business.html?id=${reel.listingId}'">🏪 View Listing</div>`
+    : '';
+
+  div.innerHTML = `
+    <div class="reel-video-wrap" onclick="togglePlay(this)">
+      <video src="${reel.videoUrl}" loop playsinline preload="metadata" data-reel-id="${reel.id}"></video>
+      <div class="reel-play-overlay"><div class="reel-play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="reel-actions-side">
+        <div class="reel-action-btn">
+          <button class="icon ${reel.liked?'liked':''}" onclick="event.stopPropagation();toggleLike('${reel.id}',this)" data-liked="${reel.liked?'1':'0'}">
+            ${reel.liked ? '❤️' : '🤍'}
+          </button>
+          <span id="like-count-${reel.id}">${fmtNum(reel.likeCount||0)}</span>
+        </div>
+        <div class="reel-action-btn">
+          <button class="icon" onclick="event.stopPropagation();toggleComments('${reel.id}')">💬</button>
+          <span id="comment-count-${reel.id}">${fmtNum(reel.commentCount||0)}</span>
+        </div>
+        <div class="reel-action-btn">
+          <button class="icon" onclick="event.stopPropagation();shareReel('${reel.id}')">🔗</button>
+          <span>Share</span>
+        </div>
+        ${currentUser?.id===reel.authorId ? `<div class="reel-action-btn"><button class="icon" onclick="event.stopPropagation();deleteReel('${reel.id}')">🗑️</button><span>Delete</span></div>` : ''}
+      </div>
+      <div class="reel-info">
+        <div class="reel-author">${avatarHTML}<span class="reel-author-name">@${reel.authorName}</span></div>
+        ${reel.caption ? `<div class="reel-caption">${escHtml(reel.caption)}</div>` : ''}
+        ${listingTag}
+      </div>
+    </div>
+    <div class="reel-meta-bar">
+      <span>👁️ ${fmtNum(reel.views||0)} views</span>
+      <span>🕐 ${timeSince(reel.createdAt)}</span>
+    </div>
+  `;
+  container.appendChild(div);
+
+  // Comments panel (injected after card)
+  const commentsPanel = document.createElement('div');
+  commentsPanel.className = 'comments-panel';
+  commentsPanel.id = `comments-${reel.id}`;
+  commentsPanel.innerHTML = `
+    <h4>💬 Comments</h4>
+    ${token ? `<div class="comment-form"><input type="text" id="comment-input-${reel.id}" placeholder="Add a comment…" onkeydown="if(event.key==='Enter')submitComment('${reel.id}')"/><button onclick="submitComment('${reel.id}')">Post</button></div>` : `<div class="auth-gate-inline" style="margin-bottom:14px"><a href="/login.html">Sign in</a> to comment</div>`}
+    <div id="comment-list-${reel.id}"><div class="no-comments">Loading comments…</div></div>
+  `;
+  container.appendChild(commentsPanel);
+
+  // Observe for autoplay
+  const video = div.querySelector('video');
+  observeVideo(video, reel.id);
+}
+
+// ── Intersection Observer for autoplay ──────────────
+const videoObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    const video = entry.target;
+    if(entry.isIntersecting){ video.play().catch(()=>{}); }
+    else { video.pause(); }
+  });
+},{threshold:0.6});
+
+function observeVideo(video, reelId){
+  videoObserver.observe(video);
+}
+
+function togglePlay(wrapper){
+  const video = wrapper.querySelector('video');
+  if(video.paused) video.play().catch(()=>{});
+  else video.pause();
+}
+
+// ── Likes ────────────────────────────────────────────
+async function toggleLike(reelId, btn){
+  if(!token){ alert('Sign in to like reels'); return; }
+  const liked = btn.getAttribute('data-liked')==='1';
+  btn.setAttribute('data-liked', liked?'0':'1');
+  btn.textContent = liked ? '🤍' : '❤️';
+  btn.classList.toggle('liked', !liked);
+  try{
+    const r = await fetch(`${API}/api/reels/${reelId}/like`,{method:'POST',headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'}});
+    const data = await r.json();
+    document.getElementById(`like-count-${reelId}`).textContent = fmtNum(data.likeCount||0);
+  }catch(e){ console.error(e); }
+}
+
+// ── Comments ─────────────────────────────────────────
+async function toggleComments(reelId){
+  const panel = document.getElementById(`comments-${reelId}`);
+  const isOpen = panel.classList.contains('open');
+  if(!isOpen){
+    panel.classList.add('open');
+    await loadComments(reelId);
+  } else {
+    panel.classList.remove('open');
+  }
+}
+
+async function loadComments(reelId){
+  const list = document.getElementById(`comment-list-${reelId}`);
+  try{
+    const r = await fetch(`${API}/api/reels/${reelId}/comments`);
+    const comments = await r.json();
+    if(!comments.length){ list.innerHTML='<div class="no-comments">No comments yet. Be the first!</div>'; return; }
+    list.innerHTML = comments.map(c=>{
+      const initials = (c.authorName||'U').charAt(0).toUpperCase();
+      const avatarHTML = c.authorAvatar
+        ? `<div class="comment-avatar"><img src="${c.authorAvatar}" alt="${c.authorName}"/></div>`
+        : `<div class="comment-avatar">${initials}</div>`;
+      return `<div class="comment-item">${avatarHTML}<div class="comment-body"><div class="comment-author">@${escHtml(c.authorName)}</div><div class="comment-text">${escHtml(c.text)}</div><div class="comment-time">${timeSince(c.createdAt)}</div></div></div>`;
+    }).join('');
+  }catch(e){ list.innerHTML='<div class="no-comments">Could not load comments.</div>'; }
+}
+
+async function submitComment(reelId){
+  if(!token){ alert('Sign in to comment'); return; }
+  const input = document.getElementById(`comment-input-${reelId}`);
+  const text = input.value.trim();
+  if(!text) return;
+  try{
+    const r = await fetch(`${API}/api/reels/${reelId}/comments`,{method:'POST',headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({text})});
+    const data = await r.json();
+    if(data.success){
+      input.value='';
+      await loadComments(reelId);
+      const el = document.getElementById(`comment-count-${reelId}`);
+      if(el) el.textContent = fmtNum((parseInt(el.textContent)||0)+1);
+    }
+  }catch(e){ console.error(e); }
+}
+
+// ── Share ────────────────────────────────────────────
+function shareReel(reelId){
+  const url = `${location.origin}/reels.html#${reelId}`;
+  if(navigator.share){ navigator.share({title:'VyneMarket Reel',url}).catch(()=>{}); }
+  else { navigator.clipboard.writeText(url).then(()=>alert('Link copied!')).catch(()=>{}); }
+}
+
+// ── Delete ───────────────────────────────────────────
+async function deleteReel(reelId){
+  if(!confirm('Delete this reel? This cannot be undone.')) return;
+  try{
+    const r = await fetch(`${API}/api/reels/${reelId}`,{method:'DELETE',headers:{'Authorization':`Bearer ${token}`}});
+    if(r.ok){
+      const card = document.getElementById(`reel-${reelId}`);
+      const panel = document.getElementById(`comments-${reelId}`);
+      if(card) card.remove();
+      if(panel) panel.remove();
+    }
+  }catch(e){ console.error(e); }
+}
+
+// ── Upload Modal ─────────────────────────────────────
+function openUpload(){
+  if(!token){ window.location='/login.html'; return; }
+  document.getElementById('upload-modal').classList.remove('hidden');
+  loadUserListings();
+}
+function closeUpload(){
+  document.getElementById('upload-modal').classList.add('hidden');
+  selectedFile=null;
+  document.getElementById('video-preview-wrap').style.display='none';
+  document.getElementById('video-preview').src='';
+  document.getElementById('reel-caption').value='';
+  document.getElementById('reel-listing').value='';
+  document.getElementById('post-btn').disabled=true;
+  document.getElementById('upload-progress').style.display='none';
+  document.getElementById('progress-fill').style.width='0%';
+}
+
+async function loadUserListings(){
+  if(!token) return;
+  try{
+    const r = await fetch(`${API}/api/listings?owner=me`,{headers:{'Authorization':`Bearer ${token}`}});
+    const data = await r.json();
+    const sel = document.getElementById('reel-listing');
+    const myListings = (data.listings||data||[]).filter(l=>l.ownerId===currentUser?.id);
+    if(myListings.length>0){
+      myListings.forEach(l=>{ const o=document.createElement('option'); o.value=l.id; o.textContent=l.businessName||l.title||l.id; sel.appendChild(o); });
+      document.getElementById('listing-field').style.display='block';
+    }
+  }catch(e){}
+}
+
+function handleFileSelect(input){
+  const file = input.files[0];
+  if(!file) return;
+  selectedFile = file;
+  const url = URL.createObjectURL(file);
+  const preview = document.getElementById('video-preview');
+  preview.src = url;
+  document.getElementById('video-preview-wrap').style.display='block';
+  document.getElementById('post-btn').disabled=false;
+}
+
+// Drag and drop
+const dz = document.getElementById('drop-zone');
+dz.addEventListener('dragover',e=>{ e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave',()=>dz.classList.remove('drag-over'));
+dz.addEventListener('drop',e=>{
+  e.preventDefault(); dz.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if(file && ['video/mp4','video/quicktime','video/webm'].includes(file.type)){
+    selectedFile=file;
+    const url=URL.createObjectURL(file);
+    document.getElementById('video-preview').src=url;
+    document.getElementById('video-preview-wrap').style.display='block';
+    document.getElementById('post-btn').disabled=false;
+  }
+});
+
+async function postReel(){
+  if(!selectedFile){ alert('Please select a video first.'); return; }
+  const btn = document.getElementById('post-btn');
+  btn.disabled=true; btn.textContent='Posting…';
+  const caption = document.getElementById('reel-caption').value.trim();
+  const listingId = document.getElementById('reel-listing').value;
+  const formData = new FormData();
+  formData.append('video', selectedFile);
+  if(caption) formData.append('caption', caption);
+  if(listingId) formData.append('listingId', listingId);
+
+  // Show progress
+  document.getElementById('upload-progress').style.display='block';
+  const fill = document.getElementById('progress-fill');
+  const label = document.getElementById('progress-label');
+
+  try{
+    const xhr = new XMLHttpRequest();
+    xhr.upload.addEventListener('progress',e=>{
+      if(e.lengthComputable){
+        const pct = Math.round(e.loaded/e.total*100);
+        fill.style.width=pct+'%';
+        label.textContent=`Uploading… ${pct}%`;
+      }
+    });
+    xhr.open('POST',`${API}/api/reels/post`);
+    xhr.setRequestHeader('Authorization',`Bearer ${token}`);
+    xhr.onload = ()=>{
+      if(xhr.status===200){
+        const data = JSON.parse(xhr.responseText);
+        closeUpload();
+        // Prepend new reel to feed
+        offset++;
+        const container = document.getElementById('feed-container');
+        const isEmpty = container.querySelector('.empty-state');
+        if(isEmpty) container.innerHTML='';
+        // Re-render by reloading first item
+        renderReel({...data.reel, liked:false});
+        container.insertBefore(container.lastChild.previousSibling, container.firstChild);
+        container.insertBefore(container.lastChild, container.firstChild);
+      } else {
+        alert('Upload failed. Please try again.');
+        btn.disabled=false; btn.textContent='Post Reel';
+        document.getElementById('upload-progress').style.display='none';
+      }
+    };
+    xhr.onerror = ()=>{ alert('Network error.'); btn.disabled=false; btn.textContent='Post Reel'; };
+    xhr.send(formData);
+  }catch(e){ console.error(e); btn.disabled=false; btn.textContent='Post Reel'; }
+}
+
+function escHtml(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+// ── Init ─────────────────────────────────────────────
+(async()=>{
+  await initAuth();
+  await loadFeed();
+
+  // Handle deep link to a specific reel
+  if(location.hash){
+    const reelId = location.hash.slice(1);
+    setTimeout(()=>{
+      const el = document.getElementById(`reel-${reelId}`);
+      if(el) el.scrollIntoView({behavior:'smooth'});
+    }, 500);
+  }
+})();
+</script>
+</body>
+</html>
