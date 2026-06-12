@@ -1,0 +1,72 @@
+/* Dashboard */
+.dashboard-page { padding: 90px 0 60px; }
+.dashboard-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
+}
+.dashboard-header h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; }
+
+.dashboard-stats {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px; margin-bottom: 36px;
+}
+.stat-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 22px 20px; display: flex; align-items: center; gap: 16px;
+}
+.stat-icon { font-size: 2rem; }
+.stat-num  { font-size: 1.8rem; font-weight: 800; color: var(--brand); line-height: 1; }
+.stat-lbl  { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; }
+
+.dashboard-tabs { display: flex; gap: 4px; margin-bottom: 24px; background: var(--bg2); border-radius: 50px; padding: 4px; width: fit-content; }
+.dash-tab {
+  background: none; border: none; color: var(--text-muted); font-size: 0.9rem; font-weight: 600;
+  padding: 9px 22px; border-radius: 50px; cursor: pointer; transition: all 0.2s; font-family: var(--font);
+  display: flex; align-items: center; gap: 8px;
+}
+.dash-tab.active { background: var(--card); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+.msg-badge { background: var(--brand); color: #0A0F1E; font-size: 0.72rem; font-weight: 800; padding: 2px 7px; border-radius: 50px; }
+
+.my-listings-grid { display: flex; flex-direction: column; gap: 12px; }
+
+.my-listing-row {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px 20px; display: flex; align-items: center; gap: 16px;
+}
+.my-listing-img {
+  width: 72px; height: 64px; border-radius: var(--radius-sm); overflow: hidden;
+  background: var(--bg3); flex-shrink: 0; font-size: 2rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.my-listing-img img { width:100%; height:100%; object-fit:cover; }
+.my-listing-info { flex: 1; min-width: 0; }
+.my-listing-name { font-weight: 700; font-size: 0.98rem; }
+.my-listing-cat  { font-size: 0.78rem; color: var(--brand); margin-bottom: 4px; }
+.my-listing-stats { display: flex; gap: 14px; font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+.my-listing-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.my-listing-actions a, .my-listing-actions button {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 50px;
+  padding: 7px 14px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
+  color: var(--text); transition: all 0.2s; font-family: var(--font); text-decoration: none;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.my-listing-actions a:hover { border-color: var(--brand); color: var(--brand); }
+.my-listing-actions button.del-btn:hover { border-color: #FF6B6B; color: #FF6B6B; }
+
+.message-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 18px 20px; margin-bottom: 10px;
+}
+.message-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.message-from { font-weight: 700; font-size: 0.95rem; }
+.message-for  { font-size: 0.8rem; color: var(--brand); }
+.message-date { font-size: 0.78rem; color: var(--text-dim); flex-shrink: 0; }
+.message-body { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+.message-contact-row { display: flex; gap: 14px; margin-top: 10px; flex-wrap: wrap; }
+.message-contact-item { font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
+.message-contact-item a { color: var(--brand); }
+
+@media (max-width:600px) {
+  .my-listing-row { flex-wrap: wrap; }
+  .my-listing-actions { width: 100%; }
+}

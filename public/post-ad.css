@@ -1,0 +1,103 @@
+/* Post Ad page styles */
+
+.post-ad-page { padding-top: 68px; min-height: 100vh; }
+
+.post-ad-container {
+  display: grid; grid-template-columns: 280px 1fr;
+  min-height: calc(100vh - 68px);
+}
+
+/* Sidebar */
+.post-ad-sidebar {
+  background: var(--bg2); border-right: 1px solid var(--border);
+  padding: 40px 28px; position: sticky; top: 68px;
+  height: calc(100vh - 68px); overflow-y: auto;
+  display: flex; flex-direction: column; gap: 32px;
+}
+.sidebar-brand { text-align: center; }
+.sidebar-brand h3 { font-size: 1.1rem; font-weight: 800; margin: 12px 0 6px; }
+.sidebar-brand p  { font-size: 0.85rem; color: var(--text-muted); }
+
+.progress-steps { display: flex; flex-direction: column; gap: 4px; }
+.progress-step {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px; border-radius: var(--radius-sm);
+  transition: background 0.2s; opacity: 0.45;
+}
+.progress-step.active   { background: rgba(0,200,150,0.08); opacity: 1; }
+.progress-step.done     { opacity: 0.7; }
+.ps-num {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--bg3); border: 2px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+  transition: all 0.2s;
+}
+.progress-step.active .ps-num { background: var(--brand); border-color: var(--brand); color: #0A0F1E; }
+.progress-step.done   .ps-num { background: var(--brand); border-color: var(--brand); color: #0A0F1E; }
+.ps-title { font-size: 0.88rem; font-weight: 600; }
+.ps-desc  { font-size: 0.78rem; color: var(--text-muted); }
+
+.sidebar-perks { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
+.perk-item { display: flex; align-items: center; gap: 10px; font-size: 0.88rem; color: var(--text-muted); }
+.perk-icon { font-size: 1rem; }
+
+/* Form area */
+.post-ad-form-wrap {
+  padding: 48px 48px;
+  max-width: 700px;
+}
+
+.form-step { display: none; }
+.form-step.active { display: block; }
+
+.step-title    { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
+.step-subtitle { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 32px; }
+
+.form-fields { display: flex; flex-direction: column; gap: 18px; margin-bottom: 32px; }
+
+.step-actions { display: flex; gap: 14px; align-items: center; }
+
+/* Upload zone */
+.upload-zone {
+  border: 2px dashed var(--border2); border-radius: var(--radius);
+  padding: 32px; text-align: center; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.upload-zone:hover { border-color: var(--brand); background: rgba(0,200,150,0.04); }
+.upload-zone-inner { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.upload-icon { font-size: 2rem; }
+.upload-zone p { font-size: 0.9rem; font-weight: 600; }
+
+.image-previews { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.image-preview-item {
+  position: relative; width: 90px; height: 90px; border-radius: var(--radius-sm); overflow: hidden;
+  border: 2px solid var(--border);
+}
+.image-preview-item img { width: 100%; height: 100%; object-fit: cover; }
+.image-preview-remove {
+  position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.7);
+  border: none; border-radius: 50%; width: 22px; height: 22px;
+  color: white; font-size: 0.75rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.submit-summary {
+  background: rgba(0,200,150,0.06); border: 1px solid rgba(0,200,150,0.2);
+  border-radius: var(--radius); padding: 18px 20px;
+  display: flex; gap: 20px; flex-wrap: wrap;
+}
+.summary-item { display: flex; align-items: center; gap: 8px; font-size: 0.88rem; font-weight: 600; color: var(--brand); }
+
+@media (max-width: 900px) {
+  .post-ad-container { grid-template-columns: 1fr; }
+  .post-ad-sidebar { position: static; height: auto; flex-direction: row; flex-wrap: wrap; gap: 16px; padding: 20px 16px; }
+  .progress-steps { flex-direction: row; flex-wrap: wrap; gap: 8px; flex: 1; }
+  .progress-step { padding: 8px 10px; }
+  .sidebar-brand { display: none; }
+  .sidebar-perks { display: none; }
+  .post-ad-form-wrap { padding: 28px 20px; }
+}
+@media (max-width: 600px) {
+  .post-ad-sidebar { display: none; }
+}

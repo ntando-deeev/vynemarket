@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title id="page-title">Business — GrowthMarket</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="business.css"/>
+</head>
+<body>
+
+<nav class="nav scrolled">
+  <div class="nav-inner">
+    <a href="/" class="logo"><span class="logo-icon">🌍</span><span class="logo-text">GrowthMarket</span></a>
+    <ul class="nav-links">
+      <li><a href="/listings.html">Browse Businesses</a></li>
+    </ul>
+    <div class="nav-cta" id="nav-cta">
+      <a href="/login.html" class="btn-ghost">Sign In</a>
+      <a href="/post-ad.html" class="btn-primary">+ List Your Business</a>
+    </div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <ul>
+    <li><a href="/listings.html">Browse</a></li>
+    <li><a href="/login.html">Sign In</a></li>
+    <li><a href="/post-ad.html" class="btn-primary" style="display:inline-block;margin-top:12px">+ List Business</a></li>
+  </ul>
+</div>
+
+<div id="loading-state" style="display:flex;justify-content:center;align-items:center;min-height:100vh">
+  <div class="spinner" style="width:40px;height:40px;border-width:3px"></div>
+</div>
+
+<div id="error-state" style="display:none;text-align:center;padding:120px 20px">
+  <div style="font-size:3rem;margin-bottom:16px">😕</div>
+  <h2>Business not found</h2>
+  <p style="color:var(--text-muted);margin:12px 0 24px">This listing may have been removed or the link is invalid.</p>
+  <a href="/listings.html" class="btn-primary">Browse Businesses</a>
+</div>
+
+<main id="business-main" style="display:none" class="business-page">
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <div class="container">
+      <a href="/">Home</a> <span>›</span>
+      <a href="/listings.html">Businesses</a> <span>›</span>
+      <span id="bc-name">…</span>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="business-layout">
+
+      <!-- LEFT: Main content -->
+      <div class="business-main-col">
+
+        <!-- Gallery -->
+        <div class="business-gallery" id="business-gallery">
+          <div class="gallery-main" id="gallery-main">
+            <div class="gallery-placeholder" id="gallery-placeholder">
+              <span id="gallery-emoji" style="font-size:5rem">🏪</span>
+            </div>
+          </div>
+          <div class="gallery-thumbs" id="gallery-thumbs"></div>
+        </div>
+
+        <!-- Info -->
+        <div class="business-info-card">
+          <div class="business-header">
+            <div>
+              <div class="business-cat-badge" id="business-cat">Category</div>
+              <h1 id="business-name">Loading…</h1>
+              <p class="business-tagline" id="business-tagline" style="display:none"></p>
+            </div>
+            <div class="business-header-meta">
+              <div class="biz-stat"><span id="view-count">0</span><span>views</span></div>
+              <div class="biz-stat"><span id="save-count">0</span><span>saves</span></div>
+              <button class="save-btn" id="save-btn" onclick="toggleSave()">🤍 Save</button>
+            </div>
+          </div>
+
+          <div class="business-location-row" id="business-location" style="display:none">
+            <span>📍</span><span id="location-text"></span>
+          </div>
+
+          <div class="business-meta-chips" id="business-meta-chips"></div>
+
+          <div class="business-description-block">
+            <h3>About This Business</h3>
+            <p id="business-description" style="white-space:pre-line;line-height:1.8;color:var(--text-muted)"></p>
+          </div>
+
+          <div id="business-tags-row" style="display:none;margin-top:16px">
+            <div class="listing-card-tags" id="business-tags"></div>
+          </div>
+        </div>
+
+        <!-- Reviews -->
+        <div class="reviews-card">
+          <div class="reviews-header">
+            <h3>Customer Reviews</h3>
+            <div class="reviews-avg" id="reviews-avg"></div>
+          </div>
+          <div id="reviews-list">
+            <p style="color:var(--text-dim);font-size:0.9rem">No reviews yet. Be the first to leave a review!</p>
+          </div>
+          <div class="write-review-toggle" id="write-review-toggle">
+            <button class="btn-ghost" onclick="toggleReviewForm()">✍️ Write a Review</button>
+          </div>
+          <form id="review-form" style="display:none;margin-top:20px" onsubmit="submitReview(event)">
+            <div class="form-group">
+              <label>Rating</label>
+              <div class="star-picker" id="star-picker">
+                <span onclick="setRating(1)">☆</span><span onclick="setRating(2)">☆</span>
+                <span onclick="setRating(3)">☆</span><span onclick="setRating(4)">☆</span>
+                <span onclick="setRating(5)">☆</span>
+              </div>
+              <input type="hidden" id="rating-val" value="0"/>
+            </div>
+            <div class="form-group">
+              <label>Your Review</label>
+              <textarea name="comment" rows="3" placeholder="Share your experience with this business…" required maxlength="500"></textarea>
+            </div>
+            <button type="submit" class="btn-primary">Submit Review</button>
+            <div class="form-error" id="review-error" style="display:none;margin-top:8px"></div>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Contact sidebar -->
+      <div class="business-sidebar-col">
+        <div class="contact-card sticky-card">
+          <h3>Contact Business</h3>
+
+          <div id="price-display" style="display:none" class="price-display">
+            <span id="price-text"></span>
+          </div>
+
+          <div class="contact-actions" id="contact-actions">
+            <!-- Injected by JS -->
+          </div>
+
+          <div class="contact-divider">or send a message</div>
+
+          <form id="contact-form" onsubmit="submitContact(event)">
+            <div class="form-fields" style="gap:12px">
+              <div class="form-group">
+                <input type="text" name="senderName" placeholder="Your name" required/>
+              </div>
+              <div class="form-group">
+                <input type="email" name="senderEmail" placeholder="Your email" required/>
+              </div>
+              <div class="form-group">
+                <input type="tel" name="senderPhone" placeholder="Your phone (optional)"/>
+              </div>
+              <div class="form-group">
+                <textarea name="message" rows="3" placeholder="Your message…" required maxlength="500"></textarea>
+              </div>
+              <button type="submit" class="btn-primary" style="width:100%" id="contact-submit-btn">Send Message</button>
+              <div class="form-error" id="contact-error" style="display:none"></div>
+              <div style="display:none;color:var(--brand);font-size:0.88rem;font-weight:600" id="contact-success">✅ Message sent! The business will contact you soon.</div>
+            </div>
+          </form>
+
+          <div class="social-links" id="social-links" style="display:none">
+            <div style="font-size:0.8rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Follow on Social</div>
+            <div id="social-links-inner"></div>
+          </div>
+
+          <div class="business-details-list" id="business-details-list"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Similar listings -->
+    <div class="similar-section">
+      <div class="section-header-row" style="margin-bottom:24px">
+        <div>
+          <span class="section-eye">Explore More</span>
+          <h2>Similar <span class="gradient-text">Businesses</span></h2>
+        </div>
+        <a href="/listings.html" class="btn-ghost">See All →</a>
+      </div>
+      <div class="listings-grid" id="similar-grid"></div>
+    </div>
+  </div>
+</main>
+
+<!-- Image Lightbox -->
+<div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9000;display:none;align-items:center;justify-content:center" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="" style="max-height:90vh;max-width:90vw;border-radius:8px;object-fit:contain"/>
+  <button style="position:absolute;top:20px;right:24px;background:none;border:none;color:#fff;font-size:2rem;cursor:pointer" onclick="closeLightbox()">✕</button>
+</div>
+
+<script src="app.js"></script>
+<script src="business.js"></script>
+</body>
+</html>

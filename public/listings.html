@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Browse Businesses — GrowthMarket</title>
+<meta name="description" content="Discover thousands of businesses worldwide on GrowthMarket — the free business directory. Search by category, country, and more."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="listings.css"/>
+</head>
+<body>
+
+<nav class="nav scrolled">
+  <div class="nav-inner">
+    <a href="/" class="logo"><span class="logo-icon">🌍</span><span class="logo-text">GrowthMarket</span></a>
+    <ul class="nav-links">
+      <li><a href="/listings.html" style="color:var(--brand)">Browse Businesses</a></li>
+      <li><a href="#" onclick="filterCat('services')">Services</a></li>
+      <li><a href="#" onclick="filterCat('ecommerce')">E-Commerce</a></li>
+    </ul>
+    <div class="nav-cta" id="nav-cta">
+      <a href="/login.html" class="btn-ghost" id="nav-login">Sign In</a>
+      <a href="/post-ad.html" class="btn-primary">+ List Your Business</a>
+    </div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <ul>
+    <li><a href="/listings.html">Browse Businesses</a></li>
+    <li><a href="/login.html">Sign In</a></li>
+    <li><a href="/post-ad.html" class="btn-primary" style="display:inline-block;margin-top:12px">+ List Your Business</a></li>
+  </ul>
+</div>
+
+<main class="listings-page">
+  <div class="container">
+    <!-- HEADER -->
+    <div class="listings-header">
+      <span class="section-eye">Marketplace</span>
+      <h1>Browse <span class="gradient-text">Businesses</span></h1>
+      <p>Discover businesses and entrepreneurs from around the world.</p>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="Search businesses, tags, locations…"/>
+        <button class="btn-primary btn-sm" onclick="applyFilters()">Search</button>
+      </div>
+      <div class="filter-selects">
+        <select id="category-filter" onchange="applyFilters()">
+          <option value="all">All Categories</option>
+          <option value="fashion">👗 Fashion</option>
+          <option value="beauty">💄 Beauty</option>
+          <option value="food">🍔 Food & Drinks</option>
+          <option value="electronics">📱 Electronics</option>
+          <option value="health">💪 Health</option>
+          <option value="home">🏠 Home & Living</option>
+          <option value="services">🛠️ Services</option>
+          <option value="ecommerce">🛒 E-Commerce</option>
+          <option value="real-estate">🏢 Real Estate</option>
+          <option value="education">📚 Education</option>
+          <option value="automotive">🚗 Automotive</option>
+          <option value="finance">💳 Finance</option>
+          <option value="travel">✈️ Travel</option>
+          <option value="entertainment">🎬 Entertainment</option>
+          <option value="agriculture">🌱 Agriculture</option>
+          <option value="construction">🏗️ Construction</option>
+          <option value="manufacturing">🏭 Manufacturing</option>
+          <option value="sports">⚽ Sports</option>
+          <option value="technology">💻 Technology</option>
+          <option value="other">📦 Other</option>
+        </select>
+        <select id="country-filter" onchange="applyFilters()">
+          <option value="">All Countries</option>
+          <option>South Africa</option><option>Nigeria</option><option>Kenya</option>
+          <option>Ghana</option><option>Zimbabwe</option><option>Tanzania</option>
+          <option>Uganda</option><option>Zambia</option><option>Ethiopia</option>
+          <option>Botswana</option><option>Namibia</option><option>Mozambique</option>
+          <option>United States</option><option>United Kingdom</option>
+          <option>Canada</option><option>Australia</option>
+          <option>Germany</option><option>France</option><option>Netherlands</option>
+          <option>India</option><option>UAE</option><option>Saudi Arabia</option>
+          <option>Brazil</option><option>Mexico</option><option>Argentina</option>
+          <option>China</option><option>Japan</option><option>South Korea</option>
+          <option>Other</option>
+        </select>
+        <select id="sort-filter" onchange="applyFilters()">
+          <option value="newest">Newest First</option>
+          <option value="popular">Most Viewed</option>
+          <option value="rating">Highest Rated</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ACTIVE FILTER TAGS -->
+    <div id="active-filters" class="active-filters" style="display:none"></div>
+
+    <!-- META + GRID -->
+    <div class="listings-meta-row">
+      <div class="listings-meta" id="listings-meta">Loading…</div>
+    </div>
+
+    <div class="listings-grid" id="listings-grid"></div>
+
+    <div class="empty-state" id="empty-state" style="display:none">
+      <div style="font-size:3.5rem;margin-bottom:20px">🔍</div>
+      <h3>No businesses found</h3>
+      <p>Try adjusting your filters or be the first to list a business in this category!</p>
+      <a href="/post-ad.html" class="btn-primary" style="margin-top:20px;display:inline-block">List Your Business Free →</a>
+    </div>
+
+    <div id="load-more-wrap" style="text-align:center;margin-top:36px;display:none">
+      <button class="btn-ghost" id="load-more-btn" onclick="loadMore()">Load More Businesses</button>
+    </div>
+  </div>
+</main>
+
+<footer class="footer" style="margin-top:60px">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2024 GrowthMarket · <a href="/" style="color:var(--brand)">Home</a> · <a href="/post-ad.html" style="color:var(--brand)">List Your Business</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script src="listings.js"></script>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>GrowthMarket — Discover & Share Businesses Worldwide</title>
+<meta name="description" content="GrowthMarket is the free business directory where entrepreneurs share what they sell, find partners, and connect with customers worldwide. 100% free."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <span class="logo-icon">🌍</span>
+      <span class="logo-text">GrowthMarket</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/listings.html">Browse Businesses</a></li>
+      <li><a href="/listings.html?category=services">Services</a></li>
+      <li><a href="/listings.html?category=ecommerce">E-Commerce</a></li>
+      <li><a href="#how">How It Works</a></li>
+    </ul>
+    <div class="nav-cta" id="nav-cta">
+      <a href="/login.html" class="btn-ghost" id="nav-login">Sign In</a>
+      <a href="/post-ad.html" class="btn-primary">+ List Your Business</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <ul>
+    <li><a href="/listings.html">Browse Businesses</a></li>
+    <li><a href="/listings.html?category=services">Services</a></li>
+    <li><a href="/listings.html?category=ecommerce">E-Commerce</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="/login.html">Sign In</a></li>
+    <li><a href="/post-ad.html" class="btn-primary" style="display:inline-block;margin-top:12px">+ List Your Business</a></li>
+  </ul>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg-wrapper">
+    <div class="hero-glow glow-1"></div>
+    <div class="hero-glow glow-2"></div>
+    <canvas id="particle-canvas"></canvas>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="badge-dot"></span><span id="badge-text">Free for everyone · No fees · No commissions</span></div>
+    <h1 class="hero-title">
+      Share Your Business.<br/>
+      <span class="gradient-text">Find Your Customers.</span>
+    </h1>
+    <p class="hero-desc">GrowthMarket is the free global directory where entrepreneurs list what they sell, reach new customers, and connect with businesses worldwide — completely free, forever.</p>
+    <div class="hero-actions">
+      <a href="/post-ad.html" class="btn-hero-primary">List Your Business Free <span class="arrow">→</span></a>
+      <a href="/listings.html" class="btn-hero-ghost">Browse Businesses</a>
+    </div>
+    <div class="hero-trust">
+      <div class="trust-item"><span class="trust-num" id="stat-listings">0</span><span class="trust-label">Businesses Listed</span></div>
+      <div class="trust-sep"></div>
+      <div class="trust-item"><span class="trust-num" id="stat-users">0</span><span class="trust-label">Entrepreneurs</span></div>
+      <div class="trust-sep"></div>
+      <div class="trust-item"><span class="trust-num" id="stat-countries">0</span><span class="trust-label">Countries</span></div>
+      <div class="trust-sep"></div>
+      <div class="trust-item"><span class="trust-num">100%</span><span class="trust-label">Free Forever</span></div>
+    </div>
+  </div>
+  <div class="hero-search-bar">
+    <div class="search-pill">
+      <span class="search-pill-icon">🔍</span>
+      <input type="text" id="hero-search" placeholder="Search businesses, categories, locations…"/>
+      <select id="hero-cat">
+        <option value="">All Categories</option>
+        <option value="fashion">Fashion</option>
+        <option value="beauty">Beauty</option>
+        <option value="food">Food & Beverages</option>
+        <option value="electronics">Electronics</option>
+        <option value="health">Health & Wellness</option>
+        <option value="home">Home & Living</option>
+        <option value="services">Services</option>
+        <option value="ecommerce">E-Commerce</option>
+        <option value="real-estate">Real Estate</option>
+        <option value="education">Education</option>
+        <option value="automotive">Automotive</option>
+        <option value="finance">Finance</option>
+        <option value="travel">Travel</option>
+        <option value="entertainment">Entertainment</option>
+        <option value="agriculture">Agriculture</option>
+        <option value="construction">Construction</option>
+        <option value="manufacturing">Manufacturing</option>
+        <option value="sports">Sports & Fitness</option>
+        <option value="technology">Technology</option>
+        <option value="other">Other</option>
+      </select>
+      <button class="btn-primary" onclick="doHeroSearch()">Search</button>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories-section" id="categories">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eye">Explore</span>
+      <h2>Browse by <span class="gradient-text">Category</span></h2>
+      <p>Find exactly what you're looking for across every industry.</p>
+    </div>
+    <div class="categories-grid" id="categories-grid">
+      <!-- Injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED LISTINGS -->
+<section class="featured-section" id="featured">
+  <div class="container">
+    <div class="section-header-row">
+      <div>
+        <span class="section-eye">Spotlight</span>
+        <h2>Latest <span class="gradient-text">Businesses</span></h2>
+      </div>
+      <a href="/listings.html" class="btn-ghost">View All →</a>
+    </div>
+    <div class="listings-grid" id="featured-grid">
+      <!-- Injected by JS -->
+    </div>
+    <div class="empty-state" id="featured-empty" style="display:none">
+      <div style="font-size:3rem;margin-bottom:16px">🏪</div>
+      <h3>No businesses yet — be the first!</h3>
+      <p>GrowthMarket is brand new. List your business today and get in front of early visitors.</p>
+      <a href="/post-ad.html" class="btn-primary" style="margin-top:20px;display:inline-block">List Your Business Free →</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eye">Simple Process</span>
+      <h2>Get Found in <span class="gradient-text">3 Steps</span></h2>
+      <p>No fees, no approval wait — your business goes live instantly.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-icon-wrap"><span class="step-emoji">📝</span></div>
+        <div class="step-num">01</div>
+        <h3>Create Your Free Listing</h3>
+        <p>Add your business name, description, photos, contact info, and what you sell. Takes less than 3 minutes.</p>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step-card">
+        <div class="step-icon-wrap"><span class="step-emoji">🌍</span></div>
+        <div class="step-num">02</div>
+        <h3>Get Discovered Worldwide</h3>
+        <p>Your listing is instantly searchable by customers, partners, and investors from anywhere in the world.</p>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step-card">
+        <div class="step-icon-wrap"><span class="step-emoji">🤝</span></div>
+        <div class="step-num">03</div>
+        <h3>Connect & Grow</h3>
+        <p>Customers contact you directly via WhatsApp, email, or phone. No middleman. No commissions. Just growth.</p>
+      </div>
+    </div>
+    <div class="guarantee-banner">
+      <div class="guarantee-item"><span class="g-icon">✅</span><span>100% Free</span></div>
+      <div class="guarantee-item"><span class="g-icon">⚡</span><span>Goes Live Instantly</span></div>
+      <div class="guarantee-item"><span class="g-icon">🌍</span><span>Global Reach</span></div>
+      <div class="guarantee-item"><span class="g-icon">📱</span><span>WhatsApp Direct</span></div>
+      <div class="guarantee-item"><span class="g-icon">🔒</span><span>No Commissions</span></div>
+      <div class="guarantee-item"><span class="g-icon">💬</span><span>Direct Contact</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY GROWTHMARKET -->
+<section class="why-section">
+  <div class="container">
+    <div class="why-grid">
+      <div class="why-text">
+        <span class="section-eye">Why GrowthMarket</span>
+        <h2>Built for <span class="gradient-text">Entrepreneurs</span><br/>Not Corporations</h2>
+        <p>We built GrowthMarket because small businesses deserve a free, fair place to get discovered — not just large brands with big marketing budgets.</p>
+        <ul class="why-list">
+          <li><span class="check">✓</span> No listing fees — ever</li>
+          <li><span class="check">✓</span> No commission on sales or leads</li>
+          <li><span class="check">✓</span> Customers contact you directly</li>
+          <li><span class="check">✓</span> Works for any business, any size</li>
+          <li><span class="check">✓</span> Supports 20+ categories</li>
+          <li><span class="check">✓</span> Upload photos and videos</li>
+          <li><span class="check">✓</span> Share your social media links</li>
+          <li><span class="check">✓</span> Get reviews from real customers</li>
+        </ul>
+        <a href="/post-ad.html" class="btn-primary" style="margin-top:28px;display:inline-block">List Your Business Free →</a>
+      </div>
+      <div class="why-cards">
+        <div class="why-card wc-green">
+          <span class="wc-icon">🆓</span>
+          <h4>Always Free</h4>
+          <p>Every feature, every listing, every lead — completely free. No credit card needed.</p>
+        </div>
+        <div class="why-card wc-blue">
+          <span class="wc-icon">⚡</span>
+          <h4>Instant Visibility</h4>
+          <p>Your listing goes live the moment you submit it. No waiting for approval.</p>
+        </div>
+        <div class="why-card wc-purple">
+          <span class="wc-icon">📊</span>
+          <h4>Track Performance</h4>
+          <p>See how many people viewed your listing, saved it, or reached out to you.</p>
+        </div>
+        <div class="why-card wc-orange">
+          <span class="wc-icon">🌐</span>
+          <h4>Global Audience</h4>
+          <p>Reach customers and partners from every continent — not just your city.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-inner">
+      <h2>Ready to grow your business?</h2>
+      <p>Join thousands of entrepreneurs who list their businesses on GrowthMarket for free.</p>
+      <div class="cta-actions">
+        <a href="/post-ad.html" class="btn-hero-primary">List Your Business Free →</a>
+        <a href="/listings.html" class="btn-hero-ghost">Browse Businesses</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="logo"><span class="logo-icon">🌍</span><span class="logo-text">GrowthMarket</span></a>
+        <p>The free global directory for entrepreneurs. Share your business, find customers, and grow — all for free.</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Facebook">📘</a>
+          <a href="#" aria-label="Instagram">📸</a>
+          <a href="#" aria-label="Twitter">🐦</a>
+          <a href="#" aria-label="TikTok">🎵</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Explore</h5>
+        <ul>
+          <li><a href="/listings.html">Browse Businesses</a></li>
+          <li><a href="/listings.html?category=services">Services</a></li>
+          <li><a href="/listings.html?category=ecommerce">E-Commerce</a></li>
+          <li><a href="/listings.html?category=food">Food & Beverages</a></li>
+          <li><a href="/listings.html?category=fashion">Fashion</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>List Your Business</h5>
+        <ul>
+          <li><a href="/post-ad.html">Post a Free Ad</a></li>
+          <li><a href="/register.html">Create Account</a></li>
+          <li><a href="/login.html">Sign In</a></li>
+          <li><a href="/dashboard.html">My Dashboard</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Info</h5>
+        <ul>
+          <li><a href="#how">How It Works</a></li>
+          <li><a href="#categories">Categories</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 GrowthMarket. Free business directory for everyone.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

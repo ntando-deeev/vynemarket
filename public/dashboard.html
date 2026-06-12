@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>My Dashboard — GrowthMarket</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="dashboard.css"/>
+</head>
+<body>
+
+<nav class="nav scrolled">
+  <div class="nav-inner">
+    <a href="/" class="logo"><span class="logo-icon">🌍</span><span class="logo-text">GrowthMarket</span></a>
+    <ul class="nav-links">
+      <li><a href="/listings.html">Browse Businesses</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="/post-ad.html" class="btn-primary">+ List Business</a>
+      <button class="btn-ghost" onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+</nav>
+
+<div id="auth-check" style="display:flex;align-items:center;justify-content:center;min-height:100vh">
+  <div class="spinner" style="width:40px;height:40px;border-width:3px"></div>
+</div>
+
+<main id="dashboard-main" style="display:none" class="dashboard-page">
+  <div class="container">
+    <div class="dashboard-header">
+      <div>
+        <h1>My Dashboard</h1>
+        <p id="welcome-msg" style="color:var(--text-muted)">Loading…</p>
+      </div>
+      <a href="/post-ad.html" class="btn-hero-primary">+ List New Business</a>
+    </div>
+
+    <!-- Stats -->
+    <div class="dashboard-stats" id="dashboard-stats">
+      <div class="stat-card">
+        <span class="stat-icon">🏪</span>
+        <div>
+          <div class="stat-num" id="ds-listings">0</div>
+          <div class="stat-lbl">Active Listings</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">👁</span>
+        <div>
+          <div class="stat-num" id="ds-views">0</div>
+          <div class="stat-lbl">Total Views</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">📩</span>
+        <div>
+          <div class="stat-num" id="ds-leads">0</div>
+          <div class="stat-lbl">Messages Received</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">❤️</span>
+        <div>
+          <div class="stat-num" id="ds-saves">0</div>
+          <div class="stat-lbl">Total Saves</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="dashboard-tabs">
+      <button class="dash-tab active" onclick="showTab('listings')">My Listings</button>
+      <button class="dash-tab" onclick="showTab('messages')">Messages <span id="msg-badge" class="msg-badge" style="display:none"></span></button>
+    </div>
+
+    <!-- My Listings -->
+    <div id="tab-listings" class="tab-content">
+      <div id="my-listings-grid" class="my-listings-grid"></div>
+      <div id="my-listings-empty" style="display:none;text-align:center;padding:60px 20px">
+        <div style="font-size:3rem;margin-bottom:16px">🏪</div>
+        <h3>No listings yet</h3>
+        <p style="color:var(--text-muted);margin:10px 0 24px">Share your business with the world — it's free!</p>
+        <a href="/post-ad.html" class="btn-primary">+ List Your First Business</a>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div id="tab-messages" class="tab-content" style="display:none">
+      <div id="messages-list"></div>
+      <div id="messages-empty" style="display:none;text-align:center;padding:60px 20px">
+        <div style="font-size:3rem;margin-bottom:16px">📩</div>
+        <h3>No messages yet</h3>
+        <p style="color:var(--text-muted)">When customers contact your businesses, messages will appear here.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="app.js"></script>
+<script src="dashboard.js"></script>
+</body>
+</html>
