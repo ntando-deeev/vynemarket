@@ -1,10 +1,11 @@
-/* Business detail page JS */
+/* Business detail page JS — public catalog, no login required */
 
 const listingId = new URLSearchParams(window.location.search).get('id');
 let listingData = null;
 let selectedRating = 0;
+let activeMediaTab = 'photos'; // 'photos' | 'videos'
 
-// Nav update
+// Nav update — works for both guests and logged-in users
 (function() {
   const user = Auth?.getUser?.();
   const cta  = document.getElementById('nav-cta');
@@ -36,35 +37,14 @@ function showError() {
 function renderBusiness(l) {
   document.getElementById('loading-state').style.display = 'none';
   document.getElementById('business-main').style.display = 'block';
-  document.getElementById('page-title').textContent = l.businessName + ' — GrowthMarket';
+  document.getElementById('page-title').textContent = l.businessName + ' — VyneMarket';
   document.getElementById('bc-name').textContent = l.businessName;
 
-  // Gallery
   const cat = window.CATEGORIES_MAP?.[l.category] || { emoji:'🏪', name: l.category };
-  document.getElementById('gallery-emoji').textContent = cat.emoji;
-  if (l.images?.length) {
-    const mainEl = document.getElementById('gallery-main');
-    const imgEl  = document.createElement('img');
-    imgEl.src = l.images[0]; imgEl.alt = l.businessName;
-    imgEl.onclick = () => openLightbox(l.images[0]);
-    mainEl.innerHTML = '';
-    mainEl.appendChild(imgEl);
-    if (l.images.length > 1) {
-      const thumbs = document.getElementById('gallery-thumbs');
-      l.images.forEach((src, i) => {
-        const d = document.createElement('div');
-        d.className = 'gallery-thumb' + (i===0?' active':'');
-        d.innerHTML = `<img src="${src}" alt="photo ${i+1}"/>`;
-        d.onclick = () => {
-          document.querySelectorAll('.gallery-thumb').forEach(t=>t.classList.remove('active'));
-          d.classList.add('active');
-          imgEl.src = src;
-          imgEl.onclick = () => openLightbox(src);
-        };
-        thumbs.appendChild(d);
-      });
-    }
-  }
+
+  // ── Full Media Catalog (Photos + Videos) ─────────────────────────
+  // Available to ALL visitors — no login needed
+  _renderMediaCatalog(l, cat);
 
   // Category badge
   const catEl = document.getElementById('business-cat');
@@ -171,6 +151,85 @@ function renderBusiness(l) {
     `<div class="detail-row"><span class="detail-icon">${d.icon}</span><span class="detail-value">${d.value}</span></div>`
   ).join('');
 }
+
+// ── Media Catalog — Photos & Videos, fully public ─────
+function _renderMediaCatalog(l, cat) {
+  const galleryEl   = document.getElementById('business-gallery');
+  const hasPhotos   = l.images && l.images.length > 0;
+  const hasVideos   = l.videos && l.videos.length > 0;
+  const totalMedia  = (l.images||[]).length + (l.videos||[]).length;
+
+  if (!hasPhotos && !hasVideos) {
+    // Just show the emoji placeholder
+    document.getElementById('gallery-emoji').textContent = cat.emoji;
+    return;
+  }
+
+  // Build tabbed catalog
+  galleryEl.innerHTML = `
+    <!-- Media tabs — visible to everyone, no account needed -->
+    <div class="catalog-tabs" id="catalog-tabs" style="display:${totalMedia > 0 ? 'flex' : 'none'}">
+      <button class="catalog-tab ${hasPhotos ? 'active' : ''}" id="tab-photos" onclick="switchMediaTab('photos')">
+        📷 Photos <span class="catalog-tab-count">${(l.images||[]).length}</span>
+      </button>
+      <button class="catalog-tab ${!hasPhotos && hasVideos ? 'active' : ''}" id="tab-videos" onclick="switchMediaTab('videos')"
+        style="${!hasVideos ? 'opacity:0.45;pointer-events:none' : ''}">
+        🎬 Videos <span class="catalog-tab-count">${(l.videos||[]).length}</span>
+      </button>
+    </div>
+
+    <!-- Photos panel -->
+    <div id="catalog-photos" class="catalog-panel" style="display:${hasPhotos || !hasVideos ? 'block' : 'none'}">
+      <div class="gallery-main" id="gallery-main">
+        <img id="gallery-hero-img" src="${hasPhotos ? l.images[0] : ''}" alt="${l.businessName}" 
+          onclick="openLightbox('${hasPhotos ? l.images[0] : ''}')" style="${hasPhotos?'':'display:none'}"/>
+        <div class="gallery-placeholder" id="gallery-placeholder" style="${hasPhotos?'display:none':''}">
+          <span style="font-size:5rem">${cat.emoji}</span>
+        </div>
+      </div>
+      ${hasPhotos && l.images.length > 1 ? `
+      <div class="gallery-thumbs" id="gallery-thumbs">
+        ${l.images.map((src, i) => `
+          <div class="gallery-thumb ${i===0?'active':''}" onclick="selectPhoto('${src}', this)">
+            <img src="${src}" alt="photo ${i+1}" loading="lazy"/>
+          </div>`).join('')}
+      </div>` : ''}
+      ${!hasPhotos ? `<div style="text-align:center;padding:40px 0;color:var(--text-muted)">No photos uploaded yet.</div>` : ''}
+    </div>
+
+    <!-- Videos panel -->
+    <div id="catalog-videos" class="catalog-panel" style="display:${!hasPhotos && hasVideos ? 'block' : 'none'}">
+      ${hasVideos ? `
+      <div class="video-catalog-grid">
+        ${l.videos.map((src, i) => `
+          <div class="video-catalog-item">
+            <video src="${src}" controls preload="metadata" poster="" 
+              style="width:100%;border-radius:12px;background:#000;max-height:360px">
+              Your browser does not support video.
+            </video>
+            <div class="video-catalog-label">Video ${i+1}</div>
+          </div>`).join('')}
+      </div>` : `<div style="text-align:center;padding:40px 0;color:var(--text-muted)">No videos uploaded yet.</div>`}
+    </div>
+  `;
+
+  activeMediaTab = hasPhotos ? 'photos' : 'videos';
+}
+
+window.switchMediaTab = function(tab) {
+  activeMediaTab = tab;
+  document.getElementById('tab-photos').classList.toggle('active', tab === 'photos');
+  document.getElementById('tab-videos').classList.toggle('active', tab === 'videos');
+  document.getElementById('catalog-photos').style.display = tab === 'photos' ? 'block' : 'none';
+  document.getElementById('catalog-videos').style.display = tab === 'videos' ? 'block' : 'none';
+};
+
+window.selectPhoto = function(src, thumbEl) {
+  const hero = document.getElementById('gallery-hero-img');
+  if (hero) { hero.src = src; hero.onclick = () => openLightbox(src); }
+  document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+  thumbEl.classList.add('active');
+};
 
 // ── Lightbox ──────────────────────────────────────────
 window.openLightbox = function(src) {
