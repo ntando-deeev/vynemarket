@@ -662,7 +662,7 @@ io.on('connection', (socket)=>{
 //  SITEMAP + MISC
 // ════════════════════════════════════════════════════════
 app.get('/sitemap.xml', async (req,res)=>{
-  const base=process.env.SITE_URL||'https://vynemarket.com';
+  const base=process.env.SITE_URL||'https://vynemarket.zone.id';
   const listings=await Listing.find({status:'active'}).select('id updatedAt createdAt');
   const staticPages=['','/listings.html','/pricing.html','/referral.html','/register.html','/login.html','/reels.html'];
   const listingUrls=listings.map(l=>`<url><loc>${base}/business.html?id=${l.id}</loc><lastmod>${(l.updatedAt||l.createdAt||new Date()).toISOString().slice(0,10)}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>`).join('');
