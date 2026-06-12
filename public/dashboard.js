@@ -254,3 +254,97 @@ window.viewCompetitors = async function() {
       </div>`).join('')}
   `;
 };
+
+
+// ── Referral Dashboard Tab ────────────────────────────
+async function loadReferralDash() {
+  const wrap = document.getElementById('referral-dash-wrap');
+  if (!wrap) return;
+  const token = Auth.getToken();
+  if (!token) return;
+  try {
+    const r = await fetch('/api/referral/stats', { headers: { Authorization: 'Bearer ' + token } });
+    const d = await r.json();
+    const base = window.location.origin;
+    const link = `${base}/register.html?ref=${d.referralCode}`;
+    
+    function planBadge(plan) {
+      if (plan === 'growth') return '<span class="plan-badge-growth">🚀 Growth Suite</span>';
+      if (plan === 'pro')    return '<span class="plan-badge-pro">⚡ Business Pro</span>';
+      return '<span class="plan-badge-free">✦ Free</span>';
+    }
+
+    let progressHTML = '';
+    if (d.effectivePlan !== 'growth') {
+      const need = d.nextUnlock?.needInvites || 3;
+      const prog = d.referralCount || 0;
+      const pct  = Math.min(100, Math.round(prog / need * 100));
+      const nextPlan = d.effectivePlan === 'pro' ? 'Growth Suite 🚀' : 'Business Pro ⚡';
+      const left = Math.max(0, need - prog);
+      progressHTML = `
+        <div style="margin:20px 0">
+          <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:10px">
+            <strong>${left}</strong> more invite${left !== 1 ? 's' : ''} to unlock <strong>${nextPlan}</strong>
+          </p>
+          <div class="ref-progress-bar"><div class="ref-progress-fill" style="width:${pct}%"></div></div>
+          <p style="font-size:0.75rem;color:var(--text-dim);margin-top:6px;text-align:center">${prog} / ${need} invites</p>
+        </div>`;
+    } else {
+      progressHTML = `<p style="color:var(--brand);font-weight:700;margin:16px 0">🎉 Max level unlocked! You have all premium features.</p>`;
+    }
+
+    wrap.innerHTML = `
+      <div style="background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(236,72,153,0.05));border:1px solid var(--brand);border-radius:var(--radius-lg);padding:32px;margin-bottom:24px;text-align:center">
+        <h3 style="font-size:1.3rem;font-weight:800;margin-bottom:6px">🎁 Invite Friends, Get Premium</h3>
+        <p style="color:var(--text-muted);margin-bottom:12px">Your current plan: ${planBadge(d.effectivePlan)}</p>
+        <div style="display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:20px">
+          <div style="text-align:center"><div style="font-size:2rem;font-weight:800;color:var(--brand)">${d.referralCount || 0}</div><div style="font-size:0.8rem;color:var(--text-muted)">Friends Invited</div></div>
+          <div style="text-align:center"><div style="font-size:2rem;font-weight:800;color:var(--brand)">${d.effectivePlan === 'growth' ? '🚀' : d.nextUnlock?.needInvites || 3}</div><div style="font-size:0.8rem;color:var(--text-muted)">${d.effectivePlan === 'growth' ? 'Max Plan' : 'Invites to Next'}</div></div>
+        </div>
+        ${progressHTML}
+        <div style="background:rgba(0,0,0,0.2);border:1px dashed var(--brand);border-radius:10px;padding:12px 16px;font-family:monospace;font-size:0.85rem;color:var(--brand);word-break:break-all;margin:0 auto 16px;max-width:480px">${link}</div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button class="btn-primary" onclick="copyReferralLink('${link}')" style="font-size:0.88rem;padding:10px 18px">🔗 Copy Link</button>
+          <a href="/referral.html" class="btn-ghost" style="font-size:0.88rem;padding:10px 18px">View Full Invite Dashboard →</a>
+        </div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px">
+        <h4 style="font-weight:700;margin-bottom:16px">Unlock Tiers</h4>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;background:${d.referralCount>=0?'rgba(255,255,255,0.03)':''}">
+            <span style="font-size:1.4rem">✦</span>
+            <div style="flex:1"><div style="font-weight:600;font-size:0.9rem">Free Plan</div><div style="font-size:0.78rem;color:var(--text-muted)">0 invites — Listing, gallery, analytics, featured badge</div></div>
+            ${d.effectivePlan==='free'?'<span class="plan-badge-free">Current</span>':'<span style="color:var(--brand)">✓</span>'}
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;background:rgba(124,58,237,0.05)">
+            <span style="font-size:1.4rem">⚡</span>
+            <div style="flex:1"><div style="font-weight:600;font-size:0.9rem">Business Pro</div><div style="font-size:0.78rem;color:var(--text-muted)">3 invites — Community, broadcasts, loyalty stamps, QR codes</div></div>
+            ${d.effectivePlan==='pro'?'<span class="plan-badge-pro">Current</span>':d.referralCount>=3?'<span style="color:var(--brand)">✓ Unlocked</span>':'<span style="font-size:0.78rem;color:var(--text-dim)">${Math.max(0,3-(d.referralCount||0))} more invites</span>'}
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;background:rgba(245,158,11,0.05)">
+            <span style="font-size:1.4rem">🚀</span>
+            <div style="flex:1"><div style="font-weight:600;font-size:0.9rem">Growth Suite</div><div style="font-size:0.78rem;color:var(--text-muted)">10 invites — Competitor analytics, lead export, verified badge, sponsored</div></div>
+            ${d.effectivePlan==='growth'?'<span class="plan-badge-growth">Current</span>':d.referralCount>=10?'<span style="color:var(--brand)">✓ Unlocked</span>':'<span style="font-size:0.78rem;color:var(--text-dim)">${Math.max(0,10-(d.referralCount||0))} more invites</span>'}
+          </div>
+        </div>
+      </div>
+    `;
+  } catch(e) {
+    console.error(e);
+    wrap.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px">Failed to load referral data.</p>';
+  }
+}
+
+function copyReferralLink(link) {
+  navigator.clipboard.writeText(link)
+    .then(() => showToast('Referral link copied! 🔗'))
+    .catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = link;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      showToast('Referral link copied! 🔗');
+    });
+}

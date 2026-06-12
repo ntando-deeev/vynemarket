@@ -3,18 +3,23 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>My Dashboard — GrowthMarket</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<title>My Dashboard — VyneMarket</title>
+
+
+
+
+
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="dashboard.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"/>
 </head>
 <body>
 
 <nav class="nav scrolled">
   <div class="nav-inner">
-    <a href="/" class="logo"><span class="logo-icon">🌍</span><span class="logo-text">GrowthMarket</span></a>
+    <a href="/" class="logo"><span class="logo-icon">✦</span><span class="logo-text">VyneMarket</span></a>
     <ul class="nav-links">
       <li><a href="/listings.html">Browse Businesses</a></li>
     </ul>
@@ -88,6 +93,7 @@
       <button class="dash-tab active" onclick="showTab('listings')">My Listings</button>
       <button class="dash-tab" onclick="showTab('messages')">Messages <span id="msg-badge" class="msg-badge" style="display:none"></span></button>
       <button class="dash-tab" onclick="showTab('analytics')">📊 Analytics</button>
+      <button class="dash-tab" onclick="showTab('referral')">🎁 Invite & Earn</button>
     </div>
 
     <!-- My Listings -->
@@ -144,6 +150,14 @@
     </div>
 
   </div>
+
+    <!-- Referral / Invite tab -->
+    <div id="tab-referral" class="tab-content" style="display:none">
+      <div id="referral-dash-wrap">
+        <div style="text-align:center;padding:24px"><div class="spinner" style="width:32px;height:32px;border-width:3px;margin:0 auto"></div></div>
+      </div>
+    </div>
+
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>

@@ -3,17 +3,22 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Create Free Account — GrowthMarket</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<title>Create Free Account — VyneMarket</title>
+
+
+
+
+
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="auth.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"/>
 </head>
 <body>
 <nav class="nav scrolled">
   <div class="nav-inner">
-    <a href="/" class="logo"><span class="logo-icon">🌍</span><span class="logo-text">GrowthMarket</span></a>
+    <a href="/" class="logo"><span class="logo-icon">✦</span><span class="logo-text">VyneMarket</span></a>
   </div>
 </nav>
 <main class="auth-page">
@@ -53,6 +58,11 @@
           <label>Password *</label>
           <input type="password" name="password" placeholder="Min 6 characters" required minlength="6"/>
         </div>
+        <div class="form-group" id="ref-group" style="display:none">
+          <label>Invited by (referral code)</label>
+          <input type="text" name="referralCode" id="referralCode" placeholder="e.g. ABC12345" style="font-family:monospace;letter-spacing:0.1em" readonly/>
+          <small style="color:var(--brand);font-size:0.78rem" id="ref-by-name"></small>
+        </div>
         <div class="form-error" id="reg-error" style="display:none"></div>
         <button type="submit" class="btn-hero-primary" style="width:100%" id="reg-btn">🚀 Create Free Account</button>
         <p style="font-size:0.78rem;color:var(--text-dim);text-align:center">By creating an account you agree to our terms. No credit card required.</p>
@@ -66,6 +76,29 @@
 <script>
 (function() {
   if (localStorage.getItem('gm_token')) window.location = '/dashboard.html';
+
+  // Auto-detect referral code from URL ?ref=CODE
+  const urlParams = new URLSearchParams(window.location.search);
+  const refCode = urlParams.get('ref');
+  if (refCode) {
+    const refGroup = document.getElementById('ref-group');
+    const refInput = document.getElementById('referralCode');
+    const refName  = document.getElementById('ref-by-name');
+    refGroup.style.display = 'block';
+    refInput.value = refCode.toUpperCase();
+    // Validate the code
+    fetch(`/api/referral/validate/${refCode}`)
+      .then(r => r.json())
+      .then(d => {
+        if (d.valid) {
+          refName.textContent = `✓ Invited by ${d.referrerName}${d.referrerBusiness ? ' ('+d.referrerBusiness+')' : ''}`;
+        } else {
+          refName.textContent = 'Invalid referral code';
+          refName.style.color = '#EF4444';
+        }
+      }).catch(()=>{});
+  }
+
   document.getElementById('register-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     const btn = document.getElementById('reg-btn');

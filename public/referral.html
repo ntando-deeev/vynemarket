@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Invite & Earn — VyneMarket</title>
+<meta name="description" content="Invite friends to VyneMarket and unlock premium features for free. 3 invites = Business Pro. 10 invites = Growth Suite."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav class="nav scrolled">
+  <div class="nav-inner">
+    <a href="/" class="logo"><span class="logo-icon">✦</span><span class="logo-text">VyneMarket</span></a>
+    <ul class="nav-links">
+      <li><a href="/listings.html">Browse</a></li>
+      <li><a href="/pricing.html">Pricing</a></li>
+    </ul>
+    <div class="nav-cta" id="nav-cta">
+      <a href="/login.html" class="btn-ghost">Sign In</a>
+      <a href="/register.html" class="btn-primary">Join Free</a>
+    </div>
+  </div>
+</nav>
+
+<div id="auth-check" style="display:none"></div>
+
+<main class="referral-page">
+  <div class="container">
+
+    <!-- Hero card for logged-in users -->
+    <div id="referral-hero" class="referral-hero-card" style="display:none">
+      <div id="plan-status" style="margin-bottom:16px"></div>
+      <h1>🎁 Your Invite Dashboard</h1>
+      <p>Invite friends to VyneMarket and unlock premium features — no credit card ever needed.</p>
+
+      <div class="ref-stats-row">
+        <div class="ref-stat"><div class="num" id="ref-count">0</div><div class="lbl">Friends Invited</div></div>
+        <div class="ref-stat"><div class="num" id="ref-plan-label">Free</div><div class="lbl">Current Plan</div></div>
+        <div class="ref-stat"><div class="num" id="ref-next-num">3</div><div class="lbl">Invites to Pro</div></div>
+      </div>
+
+      <div id="milestone-wrap">
+        <div class="ref-milestone">
+          <span id="milestone-text">Invite 3 friends → unlock <strong>Business Pro</strong> free</span>
+        </div>
+        <div class="ref-progress-bar">
+          <div class="ref-progress-fill" id="ref-progress" style="width:0%"></div>
+        </div>
+        <p id="progress-label" style="font-size:0.8rem;color:var(--text-dim);text-align:center;margin-bottom:20px"></p>
+      </div>
+
+      <div class="ref-code-box" id="ref-link-box">
+        <span id="ref-link-text" style="font-size:0.85rem;color:var(--text-muted)">Loading your link…</span>
+        <button class="ref-code-copy" onclick="copyLink()">Copy Link</button>
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:12px">
+        <button class="btn-ghost" onclick="shareWhatsApp()" style="font-size:0.88rem;padding:10px 18px">📱 Share on WhatsApp</button>
+        <button class="btn-ghost" onclick="shareTwitter()" style="font-size:0.88rem;padding:10px 18px">🐦 Share on X</button>
+        <button class="btn-ghost" onclick="copyLink()" style="font-size:0.88rem;padding:10px 18px">🔗 Copy Link</button>
+      </div>
+    </div>
+
+    <!-- CTA for logged-out users -->
+    <div id="guest-hero" class="referral-hero-card" style="display:none">
+      <h1>🎁 Invite Friends, Get Premium Free</h1>
+      <p>Join VyneMarket free and start inviting. 3 invites = Business Pro. 10 invites = Growth Suite. No payment needed.</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:24px">
+        <a href="/register.html" class="btn-hero-primary">Join Free & Get Your Link →</a>
+        <a href="/login.html" class="btn-ghost">I already have an account</a>
+      </div>
+    </div>
+
+    <!-- Tier breakdown -->
+    <div class="section-header" style="text-align:center;margin:48px 0 32px">
+      <h2 class="section-title">What You Unlock</h2>
+      <p class="section-sub">More invites, more power. Earned tiers stack on top of paid plans.</p>
+    </div>
+
+    <div class="referral-tiers" style="margin-bottom:60px">
+      <div class="tier-card">
+        <div class="tier-badge">✦ Free</div>
+        <div class="tier-invites">0 invites</div>
+        <ul style="list-style:none;font-size:0.82rem;color:var(--text-muted);text-align:left;margin-top:12px;display:flex;flex-direction:column;gap:6px">
+          <li>✓ Business listing</li>
+          <li>✓ Up to 8 photos + 2 videos</li>
+          <li>✓ Analytics dashboard</li>
+          <li>✓ Featured badge</li>
+          <li>✓ SEO profile</li>
+        </ul>
+      </div>
+      <div class="tier-connector">→</div>
+      <div class="tier-card tier-pro">
+        <div class="tier-badge">⚡ Business Pro</div>
+        <div class="tier-invites">3 invites</div>
+        <ul style="list-style:none;font-size:0.82rem;color:var(--text-muted);text-align:left;margin-top:12px;display:flex;flex-direction:column;gap:6px">
+          <li>✓ Everything in Free</li>
+          <li>✓ Customer invite QR codes</li>
+          <li>✓ Community feed</li>
+          <li>✓ Broadcast announcements</li>
+          <li>✓ Loyalty stamp cards</li>
+          <li>✓ Custom profile slug</li>
+        </ul>
+        <div style="margin-top:14px;font-size:0.78rem;color:var(--text-dim)">Worth $9.99/mo</div>
+      </div>
+      <div class="tier-connector">→</div>
+      <div class="tier-card tier-growth">
+        <div class="tier-badge">🚀 Growth Suite</div>
+        <div class="tier-invites">10 invites</div>
+        <ul style="list-style:none;font-size:0.82rem;color:var(--text-muted);text-align:left;margin-top:12px;display:flex;flex-direction:column;gap:6px">
+          <li>✓ Everything in Pro</li>
+          <li>✓ Competitor analytics</li>
+          <li>✓ Lead export CSV</li>
+          <li>✓ Verified badge</li>
+          <li>✓ Sponsored listing placement</li>
+          <li>✓ Custom CTA button</li>
+        </ul>
+        <div style="margin-top:14px;font-size:0.78rem;color:var(--text-dim)">Worth $19.99/mo</div>
+      </div>
+    </div>
+
+    <!-- Referred friends list (logged in only) -->
+    <div id="referrals-panel" style="display:none;margin-bottom:48px">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px">
+        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:20px">👥 Friends You Invited</h3>
+        <div id="referrals-list"></div>
+      </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:40px">
+      <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:20px">🏆 Top Inviters</h3>
+      <div id="leaderboard-wrap">
+        <div style="text-align:center;padding:24px;color:var(--text-muted)">Loading leaderboard…</div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER simplified -->
+<footer style="border-top:1px solid var(--border);padding:24px 0;text-align:center;color:var(--text-dim);font-size:0.85rem">
+  <div class="container">
+    <a href="/" style="color:var(--brand);font-weight:700">✦ VyneMarket</a> &nbsp;·&nbsp;
+    <a href="/listings.html">Browse</a> &nbsp;·&nbsp;
+    <a href="/pricing.html">Pricing</a> &nbsp;·&nbsp;
+    <a href="/dashboard.html">Dashboard</a>
+  </div>
+</footer>
+
+<script>
+const Auth={getToken:()=>localStorage.getItem('gm_token'),getUser:()=>{try{return JSON.parse(localStorage.getItem('gm_user'));}catch{return null;}},isLoggedIn:()=>!!localStorage.getItem('gm_token')};
+function showToast(msg,type='success'){let c=document.querySelector('.toast-container');if(!c){c=document.createElement('div');c.className='toast-container';document.body.appendChild(c);}const t=document.createElement('div');t.className=`toast ${type}`;t.innerHTML=`<span>${type==='success'?'✅':'❌'}</span><span>${msg}</span>`;c.appendChild(t);setTimeout(()=>t.remove(),4000);}
+
+let myReferralLink = '';
+
+function planBadgeHTML(plan){
+  if(plan==='growth') return '<span class="plan-badge-growth">🚀 Growth Suite</span>';
+  if(plan==='pro')    return '<span class="plan-badge-pro">⚡ Business Pro</span>';
+  return '<span class="plan-badge-free">✦ Free</span>';
+}
+
+async function loadReferralStats(){
+  const token=Auth.getToken();
+  if(!token){document.getElementById('guest-hero').style.display='block';loadLeaderboard();return;}
+  document.getElementById('referral-hero').style.display='block';
+  try{
+    const r=await fetch('/api/referral/stats',{headers:{Authorization:'Bearer '+token}});
+    const d=await r.json();
+    const base=window.location.origin;
+    myReferralLink=`${base}/register.html?ref=${d.referralCode}`;
+    document.getElementById('ref-link-text').textContent=myReferralLink;
+    document.getElementById('ref-count').textContent=d.referralCount;
+    document.getElementById('plan-status').innerHTML=`Current plan: ${planBadgeHTML(d.effectivePlan)}`;
+
+    if(d.effectivePlan==='growth'){
+      document.getElementById('ref-plan-label').textContent='Growth Suite 🚀';
+      document.getElementById('ref-next-num').textContent='MAX';
+      document.getElementById('milestone-wrap').innerHTML=`<div class="ref-milestone"><span class="milestone-badge">MAX LEVEL</span>&nbsp; You've unlocked all premium features! Share to keep it 🎉</div><div class="ref-progress-bar"><div class="ref-progress-fill" style="width:100%"></div></div>`;
+    } else if(d.effectivePlan==='pro'){
+      const need=d.nextUnlock?.needInvites||10;
+      const prog=d.referralCount||0;
+      const pct=Math.min(100,Math.round((prog/(need))*100));
+      document.getElementById('ref-plan-label').textContent='Business Pro ⚡';
+      document.getElementById('ref-next-num').textContent=Math.max(0,need-prog);
+      document.getElementById('ref-progress').style.width=pct+'%';
+      document.getElementById('progress-label').textContent=`${prog}/${need} — ${Math.max(0,need-prog)} more to unlock Growth Suite`;
+      document.getElementById('milestone-text').innerHTML=`Invite ${Math.max(0,need-prog)} more friends → unlock <strong>Growth Suite</strong> free`;
+    } else {
+      const need=d.nextUnlock?.needInvites||3;
+      const prog=d.referralCount||0;
+      const pct=Math.min(100,Math.round((prog/need)*100));
+      document.getElementById('ref-plan-label').textContent='Free';
+      document.getElementById('ref-next-num').textContent=Math.max(0,need-prog);
+      document.getElementById('ref-progress').style.width=pct+'%';
+      document.getElementById('progress-label').textContent=`${prog}/${need} — ${Math.max(0,need-prog)} more to unlock Business Pro`;
+      document.getElementById('milestone-text').innerHTML=`Invite ${Math.max(0,need-prog)} more friends → unlock <strong>Business Pro</strong> free`;
+    }
+
+    // Referrals list
+    if(d.referrals&&d.referrals.length>0){
+      document.getElementById('referrals-panel').style.display='block';
+      document.getElementById('referrals-list').innerHTML=d.referrals.map(r=>`
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-light)">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:700;color:#09090F;font-size:0.9rem;flex-shrink:0">${r.name.charAt(0).toUpperCase()}</div>
+          <div><div style="font-weight:600;font-size:0.9rem">${r.name}</div><div style="font-size:0.78rem;color:var(--text-muted)">Joined ${new Date(r.joinedAt).toLocaleDateString()}</div></div>
+          <span style="margin-left:auto;font-size:0.75rem;color:var(--brand);font-weight:700">+1 invite ✓</span>
+        </div>
+      `).join('');
+    }
+  }catch(e){console.error(e);}
+  loadLeaderboard();
+}
+
+async function loadLeaderboard(){
+  try{
+    const r=await fetch('/api/referral/leaderboard');
+    const data=await r.json();
+    if(!data.length){document.getElementById('leaderboard-wrap').innerHTML='<p style="text-align:center;color:var(--text-muted);padding:20px">No invites yet — be the first! 🚀</p>';return;}
+    const medals=['🥇','🥈','🥉'];
+    document.getElementById('leaderboard-wrap').innerHTML=`
+      <table class="leaderboard-table">
+        <thead><tr><th>#</th><th>Name</th><th>Business</th><th>Invites</th><th>Plan</th></tr></thead>
+        <tbody>${data.map((u,i)=>`
+          <tr class="rank-${i+1}">
+            <td>${medals[i]||`#${i+1}`}</td>
+            <td>${u.name}</td>
+            <td style="color:var(--text-muted)">${u.businessName||'—'}</td>
+            <td style="font-weight:700;color:var(--brand)">${u.referralCount}</td>
+            <td>${planBadgeHTML(u.effectivePlan)}</td>
+          </tr>
+        `).join('')}</tbody>
+      </table>`;
+  }catch(e){}
+}
+
+function copyLink(){
+  if(!myReferralLink){showToast('Sign in to get your link','error');return;}
+  navigator.clipboard.writeText(myReferralLink).then(()=>showToast('Referral link copied! 🔗')).catch(()=>{const ta=document.createElement('textarea');ta.value=myReferralLink;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();showToast('Referral link copied! 🔗');});
+}
+
+function shareWhatsApp(){
+  if(!myReferralLink){showToast('Sign in first','error');return;}
+  const msg=encodeURIComponent(`Hey! I'm using VyneMarket to grow my business. Join free with my link and we both get premium features 🚀\n${myReferralLink}`);
+  window.open(`https://wa.me/?text=${msg}`,'_blank');
+}
+
+function shareTwitter(){
+  if(!myReferralLink){showToast('Sign in first','error');return;}
+  const msg=encodeURIComponent(`Growing my business on VyneMarket 🚀 Join free with my link — invite 3 friends and you unlock premium features for free! ${myReferralLink}`);
+  window.open(`https://twitter.com/intent/tweet?text=${msg}`,'_blank');
+}
+
+// Update nav
+(function(){
+  const user=Auth.getUser();
+  const cta=document.getElementById('nav-cta');
+  if(user&&cta)cta.innerHTML=`<a href="/dashboard.html" class="btn-ghost">Dashboard</a><a href="/post-ad.html" class="btn-primary">+ List Business</a>`;
+})();
+
+loadReferralStats();
+</script>
+</body>
+</html>

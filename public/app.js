@@ -1,4 +1,4 @@
-/* GrowthMarket v2 — Homepage JS */
+/* VyneMarket v2 — Homepage JS */
 
 // ── Auth helpers ──────────────────────────────────────
 const Auth = {

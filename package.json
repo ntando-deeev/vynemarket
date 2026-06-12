@@ -1,7 +1,7 @@
 {
-  "name": "growthmarket",
-  "version": "2.0.0",
-  "description": "GrowthMarket - World's Free Business Directory",
+  "name": "vynemarket",
+  "version": "3.0.0",
+  "description": "VyneMarket — The Social Business Marketplace. Invite friends, unlock premium.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

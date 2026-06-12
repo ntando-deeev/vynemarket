@@ -3,12 +3,17 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>GrowthMarket — Discover & Share Businesses Worldwide</title>
-<meta name="description" content="GrowthMarket is the free business directory where entrepreneurs share what they sell, find partners, and connect with customers worldwide. 100% free."/>
+<title>VyneMarket — Discover & Share Businesses Worldwide</title>
+<meta name="description" content="VyneMarket is the free business directory where entrepreneurs share what they sell, find partners, and connect with customers worldwide. 100% free."/>
+
+
+
+
+
+<link rel="stylesheet" href="style.css"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"/>
 </head>
 <body>
 
@@ -16,14 +21,15 @@
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <a href="/" class="logo">
-      <span class="logo-icon">🌍</span>
-      <span class="logo-text">GrowthMarket</span>
+      <span class="logo-icon">✦</span>
+      <span class="logo-text">VyneMarket</span>
     </a>
     <ul class="nav-links">
       <li><a href="/listings.html">Browse Businesses</a></li>
       <li><a href="/listings.html?category=services">Services</a></li>
       <li><a href="/listings.html?category=ecommerce">E-Commerce</a></li>
       <li><a href="/pricing.html">Pricing</a></li>
+      <li><a href="/referral.html" style="color:var(--brand)">🎁 Invite & Earn</a></li>
       <li><a href="#how">How It Works</a></li>
     </ul>
     <div class="nav-cta" id="nav-cta">
@@ -43,6 +49,7 @@
     <li><a href="/listings.html?category=services">Services</a></li>
     <li><a href="/listings.html?category=ecommerce">E-Commerce</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
+      <li><a href="/referral.html" style="color:var(--brand)">🎁 Invite & Earn</a></li>
     <li><a href="#how">How It Works</a></li>
     <li><a href="/login.html">Sign In</a></li>
     <li><a href="/post-ad.html" class="btn-primary" style="display:inline-block;margin-top:12px">+ List Your Business</a></li>
@@ -62,7 +69,7 @@
       Share Your Business.<br/>
       <span class="gradient-text">Find Your Customers.</span>
     </h1>
-    <p class="hero-desc">GrowthMarket is the free global directory where entrepreneurs list what they sell, reach new customers, and connect with businesses worldwide — completely free, forever.</p>
+    <p class="hero-desc">VyneMarket is the free global directory where entrepreneurs list what they sell, reach new customers, and connect with businesses worldwide — completely free, forever.</p>
     <div class="hero-actions">
       <a href="/post-ad.html" class="btn-hero-primary">List Your Business Free <span class="arrow">→</span></a>
       <a href="/listings.html" class="btn-hero-ghost">Browse Businesses</a>
@@ -139,7 +146,7 @@
     <div class="empty-state" id="featured-empty" style="display:none">
       <div style="font-size:3rem;margin-bottom:16px">🏪</div>
       <h3>No businesses yet — be the first!</h3>
-      <p>GrowthMarket is brand new. List your business today and get in front of early visitors.</p>
+      <p>VyneMarket is brand new. List your business today and get in front of early visitors.</p>
       <a href="/post-ad.html" class="btn-primary" style="margin-top:20px;display:inline-block">List Your Business Free →</a>
     </div>
   </div>
@@ -162,7 +169,7 @@
       </div>
       <div class="step-connector"></div>
       <div class="step-card">
-        <div class="step-icon-wrap"><span class="step-emoji">🌍</span></div>
+        <div class="step-icon-wrap"><span class="step-emoji">✦</span></div>
         <div class="step-num">02</div>
         <h3>Get Discovered Worldwide</h3>
         <p>Your listing is instantly searchable by customers, partners, and investors from anywhere in the world.</p>
@@ -178,7 +185,7 @@
     <div class="guarantee-banner">
       <div class="guarantee-item"><span class="g-icon">✅</span><span>100% Free</span></div>
       <div class="guarantee-item"><span class="g-icon">⚡</span><span>Goes Live Instantly</span></div>
-      <div class="guarantee-item"><span class="g-icon">🌍</span><span>Global Reach</span></div>
+      <div class="guarantee-item"><span class="g-icon">✦</span><span>Global Reach</span></div>
       <div class="guarantee-item"><span class="g-icon">📱</span><span>WhatsApp Direct</span></div>
       <div class="guarantee-item"><span class="g-icon">🔒</span><span>No Commissions</span></div>
       <div class="guarantee-item"><span class="g-icon">💬</span><span>Direct Contact</span></div>
@@ -191,9 +198,9 @@
   <div class="container">
     <div class="why-grid">
       <div class="why-text">
-        <span class="section-eye">Why GrowthMarket</span>
+        <span class="section-eye">Why VyneMarket</span>
         <h2>Built for <span class="gradient-text">Entrepreneurs</span><br/>Not Corporations</h2>
-        <p>We built GrowthMarket because small businesses deserve a free, fair place to get discovered — not just large brands with big marketing budgets.</p>
+        <p>We built VyneMarket because small businesses deserve a free, fair place to get discovered — not just large brands with big marketing budgets.</p>
         <ul class="why-list">
           <li><span class="check">✓</span> No listing fees — ever</li>
           <li><span class="check">✓</span> No commission on sales or leads</li>
@@ -232,12 +239,69 @@
   </div>
 </section>
 
+
+<!-- EARN PREMIUM: REFERRAL SECTION -->
+<section class="referral-section" id="referral">
+  <div class="container">
+    <div class="section-header">
+      <div class="hero-badge" style="display:inline-flex;margin-bottom:16px"><span class="badge-dot"></span> Invite &amp; Unlock Premium</div>
+      <h2 class="section-title">Get <span class="gradient-text">Pro for Free</span></h2>
+      <p class="section-sub">Invite your network. For every 3 friends who join, you unlock Business Pro features — no credit card needed.</p>
+    </div>
+    <div class="referral-grid">
+      <div class="referral-step-card">
+        <div class="rs-icon">🔗</div>
+        <div class="rs-num">01</div>
+        <h3>Get Your Link</h3>
+        <p>Sign up free and get a unique referral link from your dashboard.</p>
+      </div>
+      <div class="referral-arrow">→</div>
+      <div class="referral-step-card">
+        <div class="rs-icon">👥</div>
+        <div class="rs-num">02</div>
+        <h3>Invite Friends</h3>
+        <p>Share with entrepreneurs in your network. Every sign-up counts.</p>
+      </div>
+      <div class="referral-arrow">→</div>
+      <div class="referral-step-card rs-highlight">
+        <div class="rs-icon">🏆</div>
+        <div class="rs-num">03</div>
+        <h3>Unlock Pro Free</h3>
+        <p>3 invites = Business Pro unlocked. 10 invites = Growth Suite unlocked. No payment required.</p>
+      </div>
+    </div>
+    <div class="referral-tiers">
+      <div class="tier-card">
+        <div class="tier-badge">✦ Free</div>
+        <div class="tier-invites">0 invites</div>
+        <p>Basic listing, gallery, analytics</p>
+      </div>
+      <div class="tier-connector">→</div>
+      <div class="tier-card tier-pro">
+        <div class="tier-badge">⚡ Business Pro</div>
+        <div class="tier-invites">3 invites</div>
+        <p>Community, broadcasts, loyalty stamps, invite QR codes</p>
+      </div>
+      <div class="tier-connector">→</div>
+      <div class="tier-card tier-growth">
+        <div class="tier-badge">🚀 Growth Suite</div>
+        <div class="tier-invites">10 invites</div>
+        <p>Competitor analytics, lead export, verified badge, sponsored listing</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:40px">
+      <a href="/register.html" class="btn-hero-primary">Start Inviting — It's Free <span class="arrow">→</span></a>
+      <p style="font-size:0.82rem;color:var(--text-dim);margin-top:12px">Or <a href="/pricing.html" style="color:var(--brand)">pay monthly</a> to unlock instantly</p>
+    </div>
+  </div>
+</section>
+
 <!-- CTA BANNER -->
 <section class="cta-section">
   <div class="container">
     <div class="cta-inner">
       <h2>Ready to grow your business?</h2>
-      <p>Join thousands of entrepreneurs who list their businesses on GrowthMarket for free.</p>
+      <p>Join thousands of entrepreneurs who list their businesses on VyneMarket for free.</p>
       <div class="cta-actions">
         <a href="/post-ad.html" class="btn-hero-primary">List Your Business Free →</a>
         <a href="/listings.html" class="btn-hero-ghost">Browse Businesses</a>
@@ -251,7 +315,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="/" class="logo"><span class="logo-icon">🌍</span><span class="logo-text">GrowthMarket</span></a>
+        <a href="/" class="logo"><span class="logo-icon">✦</span><span class="logo-text">VyneMarket</span></a>
         <p>The free global directory for entrepreneurs. Share your business, find customers, and grow — all for free.</p>
         <div class="footer-socials">
           <a href="#" aria-label="Facebook">📘</a>
@@ -288,7 +352,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2024 GrowthMarket. Free business directory for everyone.</span>
+      <span>© 2024 VyneMarket. Free business directory for everyone.</span>
     </div>
   </div>
 </footer>

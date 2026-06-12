@@ -1,20 +1,17 @@
 services:
   - type: web
-    name: growthmarket
+    name: vynemarket
     env: node
     plan: free
     buildCommand: npm install
     startCommand: node server.js
     envVars:
-      - key: NODE_ENV
-        value: production
       - key: JWT_SECRET
         generateValue: true
-      - key: DATA_DIR
-        value: /opt/render/project/data
-      - key: UPLOADS_DIR
-        value: /opt/render/project/uploads
+      - key: NODE_ENV
+        value: production
     disk:
-      name: growthmarket-data
-      mountPath: /opt/render/project
-      sizeGB: 5
+      name: vynemarket-data
+      mountPath: /data
+      sizeGB: 1
+    healthCheckPath: /api/stats

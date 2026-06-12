@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Pricing — GrowthMarket</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<title>Pricing — VyneMarket</title>
+
+
+
+
+
 <link rel="stylesheet" href="style.css"/>
 <style>
 .pricing-page { padding: 80px 0 120px; }
@@ -17,8 +19,8 @@
 @media(max-width:768px){ .pricing-grid { grid-template-columns: 1fr; } }
 .plan-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 36px 28px; position: relative; transition: transform .2s, border-color .2s; }
 .plan-card:hover { transform: translateY(-4px); border-color: var(--brand); }
-.plan-card.popular { border-color: var(--brand); background: linear-gradient(135deg, rgba(0,200,150,0.07), var(--card)); }
-.plan-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--brand); color: #0A0F1E; font-size: 0.75rem; font-weight: 700; padding: 4px 14px; border-radius: 20px; white-space: nowrap; }
+.plan-card.popular { border-color: var(--brand); background: linear-gradient(135deg, rgba(124,58,237,0.07), var(--card)); }
+.plan-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--brand); color: #09090F; font-size: 0.75rem; font-weight: 700; padding: 4px 14px; border-radius: 20px; white-space: nowrap; }
 .plan-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
 .plan-price { font-size: 2.8rem; font-weight: 800; color: var(--brand); line-height: 1; }
 .plan-price span { font-size: 1rem; font-weight: 500; color: var(--text-muted); }
@@ -28,11 +30,11 @@
 .plan-features li .fi { color: var(--brand); font-style: normal; flex-shrink: 0; }
 .plan-features li .fi.off { color: #555; }
 .plan-btn { display: block; width: 100%; text-align: center; padding: 13px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: none; transition: opacity .2s; }
-.plan-btn.primary { background: var(--brand); color: #0A0F1E; }
+.plan-btn.primary { background: var(--brand); color: #09090F; }
 .plan-btn.ghost   { background: transparent; border: 1.5px solid var(--border); color: var(--text); }
 .plan-btn:hover { opacity: 0.85; }
 .plan-btn:disabled { opacity: 0.5; cursor: default; }
-.upgrade-confirm { background: rgba(0,200,150,0.1); border: 1px solid var(--brand); border-radius: 12px; padding: 16px; text-align: center; margin-top: 12px; display: none; font-size: 0.9rem; color: var(--brand); }
+.upgrade-confirm { background: rgba(124,58,237,0.1); border: 1px solid var(--brand); border-radius: 12px; padding: 16px; text-align: center; margin-top: 12px; display: none; font-size: 0.9rem; color: var(--brand); }
 .faq-section { max-width: 700px; margin: 80px auto 0; }
 .faq-section h2 { text-align:center; margin-bottom:32px; font-size:1.8rem; }
 .faq-item { border-bottom: 1px solid var(--border); padding: 20px 0; }
@@ -40,11 +42,14 @@
 .faq-a { color: var(--text-muted); font-size: 0.92rem; margin-top: 12px; line-height: 1.7; display: none; }
 .faq-a.open { display: block; }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"/>
 </head>
 <body>
 <nav class="nav scrolled">
   <div class="nav-inner">
-    <a href="/" class="logo"><span class="logo-icon">🌍</span><span class="logo-text">GrowthMarket</span></a>
+    <a href="/" class="logo"><span class="logo-icon">✦</span><span class="logo-text">VyneMarket</span></a>
     <ul class="nav-links">
       <li><a href="/listings.html">Browse Businesses</a></li>
     </ul>
@@ -91,7 +96,7 @@
       <!-- BUSINESS PRO -->
       <div class="plan-card popular">
         <span class="plan-badge">🔥 Most Popular</span>
-        <div class="plan-name">Business Pro</div>
+        <div class="plan-name">Pro</div>
         <div class="plan-price">$9.99 <span>/month</span></div>
         <div class="plan-desc">Invite your customers and build a loyal community around your brand.</div>
         <ul class="plan-features">
@@ -108,7 +113,7 @@
           <li><i class="fi off">✗</i> Custom CTA button (Book Now etc.)</li>
         </ul>
         <button class="plan-btn primary" onclick="selectPlan('pro')" id="btn-pro">Upgrade to Pro →</button>
-        <div class="upgrade-confirm" id="confirm-pro">✅ You're now on Business Pro!</div>
+        <div class="upgrade-confirm" id="confirm-pro">✅ You're now on Pro!</div>
       </div>
 
       <!-- GROWTH SUITE -->
@@ -117,7 +122,7 @@
         <div class="plan-price">$19.99 <span>/month</span></div>
         <div class="plan-desc">The full toolkit to dominate your category and convert leads into customers.</div>
         <ul class="plan-features">
-          <li><i class="fi">✓</i> Everything in Business Pro</li>
+          <li><i class="fi">✓</i> Everything in Pro</li>
           <li><i class="fi">✓</i> <strong>Lead export to CSV</strong></li>
           <li><i class="fi">✓</i> <strong>Competitor analytics &amp; benchmarks</strong></li>
           <li><i class="fi">✓</i> <strong>Verified business badge ✓</strong></li>
@@ -131,12 +136,22 @@
 
     </div>
 
-    <!-- FAQ -->
+    
+    <!-- INVITE TO UNLOCK BANNER -->
+    <div style="background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(236,72,153,0.06));border:1px solid var(--brand);border-radius:20px;padding:32px;text-align:center;margin:48px 0">
+      <div style="font-size:2rem;margin-bottom:12px">🎁</div>
+      <h2 style="font-size:1.4rem;font-weight:800;margin-bottom:8px">Or get premium free — just invite friends</h2>
+      <p style="color:var(--text-muted);max-width:520px;margin:0 auto 20px">No credit card. No monthly fee. Invite 3 friends who sign up and your Pro plan activates automatically. Invite 10 and you unlock Growth Suite.</p>
+      <a href="/referral.html" class="btn-hero-primary" style="display:inline-flex">Get My Invite Link →</a>
+      <p style="font-size:0.78rem;color:var(--text-dim);margin-top:10px">Invites stack with paid plans for maximum features</p>
+    </div>
+    
+<!-- FAQ -->
     <div class="faq-section">
       <h2>Frequently Asked Questions</h2>
       <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is the Free plan really free forever? <span>+</span></div><div class="faq-a">Yes — 100% free, no credit card required, no expiry. You can list your business and reach customers worldwide at no cost.</div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does the customer invite feature work? <span>+</span></div><div class="faq-a">On Business Pro, you get a unique invite link and QR code for each listing. Share it on WhatsApp, Instagram, or print it on your packaging. Customers who click it join your community feed and get your broadcasts instantly.</div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is a broadcast? <span>+</span></div><div class="faq-a">A broadcast is a message you send to all your community followers at once — like a sale announcement, new product launch, or update. It shows up in their GrowthMarket feed.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does the customer invite feature work? <span>+</span></div><div class="faq-a">On Pro, you get a unique invite link and QR code for each listing. Share it on WhatsApp, Instagram, or print it on your packaging. Customers who click it join your community feed and get your broadcasts instantly.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is a broadcast? <span>+</span></div><div class="faq-a">A broadcast is a message you send to all your community followers at once — like a sale announcement, new product launch, or update. It shows up in their VyneMarket feed.</div></div>
       <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What does competitor analytics show? <span>+</span></div><div class="faq-a">Growth Suite users can see how their listing performs vs. the category average — views, leads, ratings — and see the top 5 competitors in their category by traffic.</div></div>
       <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I cancel anytime? <span>+</span></div><div class="faq-a">Yes. You can downgrade to Free at any time. Your listing stays live, you just lose the paid features.</div></div>
     </div>
