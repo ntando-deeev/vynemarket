@@ -366,5 +366,27 @@ async function loadSimilar() {
   grid.innerHTML = filtered.map(l => listingCard(l)).join('');
 }
 
+// ── Share ─────────────────────────────────────────────
+window.shareBusiness = async function() {
+  const url = window.location.href;
+  const title = listingData?.businessName || 'Check out this business on VyneMarket';
+  if (navigator.share) {
+    try {
+      await navigator.share({ title, url });
+      return;
+    } catch {}
+  }
+  // Fallback: copy to clipboard
+  try {
+    await navigator.clipboard.writeText(url);
+    const btn = document.querySelector('[onclick="shareBusiness()"]');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✅ Copied!';
+    setTimeout(() => { btn.innerHTML = orig; }, 2000);
+  } catch {
+    prompt('Copy this link:', url);
+  }
+};
+
 // ── Init ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', loadBusiness);

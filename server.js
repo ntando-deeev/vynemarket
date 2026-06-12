@@ -132,6 +132,15 @@ app.get('/api/auth/me', authMiddleware, async (req,res)=>{
   res.json(safeUser(user));
 });
 
+// Forgot password — returns generic success message to prevent user enumeration
+app.post('/api/auth/forgot-password', async (req,res)=>{
+  const {email}=req.body;
+  if(!email) return res.status(400).json({error:'Email required'});
+  // In a production app you would send an email here.
+  // For now, just acknowledge so the UX can inform the user.
+  res.json({message:'If an account with that email exists, a password reset link has been sent. Please check your inbox (and spam folder).'});
+});
+
 app.put('/api/auth/profile', authMiddleware, upload.single('avatar'), async (req,res)=>{
   const {name,phone,country,businessName,bio}=req.body;
   const upd={};

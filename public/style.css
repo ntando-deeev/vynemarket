@@ -779,3 +779,66 @@ img { max-width: 100%; display: block; }
   .reels-filter-row::-webkit-scrollbar { display:none; }
   .video-cta-inner { flex-direction: column; text-align: center; }
 }
+
+/* ══════════════════════════════════════════════════════
+   SCROLL TO TOP BUTTON
+   ══════════════════════════════════════════════════════ */
+#scroll-top-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.45);
+  z-index: 999;
+  transition: opacity 0.25s, transform 0.25s;
+}
+#scroll-top-btn:hover { transform: translateY(-3px); }
+#scroll-top-btn.visible { display: flex; }
+
+/* ══════════════════════════════════════════════════════
+   TOAST IMPROVEMENTS
+   ══════════════════════════════════════════════════════ */
+.toast-container {
+  position: fixed; bottom: 80px; right: 24px;
+  display: flex; flex-direction: column; gap: 8px; z-index: 9999;
+}
+.toast {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 10px; padding: 12px 18px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 0.88rem; font-weight: 500; color: var(--text);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  animation: slideIn 0.25s ease;
+}
+.toast.success { border-left: 3px solid #10B981; }
+.toast.error   { border-left: 3px solid #EF4444; }
+@keyframes slideIn { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:none; } }
+
+/* ══════════════════════════════════════════════════════
+   FORM HELPER STYLES
+   ══════════════════════════════════════════════════════ */
+.form-group input, .form-group select, .form-group textarea {
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  outline: none;
+  border-color: var(--brand) !important;
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.18);
+}
+
+/* ══════════════════════════════════════════════════════
+   BACK TO TOP / FIXED NAV: ensure no overlap
+   ══════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  #scroll-top-btn { bottom: 20px; right: 16px; }
+}

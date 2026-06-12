@@ -1,6 +1,7 @@
 /* post-ad.js — GrowthMarket v3 */
 
 let currentStep = 1;
+let editListingId = null;
 
 // Nav update
 (function() {
@@ -10,6 +11,71 @@ let currentStep = 1;
   const ham = document.getElementById('hamburger');
   const mob = document.getElementById('mobile-menu');
   ham?.addEventListener('click', () => mob?.classList.toggle('open'));
+})();
+
+// ── Edit mode: pre-fill form if ?edit=ID is in URL ───
+(async function checkEditMode() {
+  const params = new URLSearchParams(window.location.search);
+  const editId = params.get('edit');
+  if (!editId) return;
+  editListingId = editId;
+
+  // Update page title
+  const titleEl = document.querySelector('.sidebar-brand h3');
+  if (titleEl) titleEl.textContent = 'Edit Your Listing';
+  const submitBtn = document.getElementById('submit-btn');
+  const submitText = document.getElementById('submit-text');
+  if (submitText) submitText.textContent = 'Save Changes';
+  else if (submitBtn) submitBtn.textContent = 'Save Changes';
+
+  // Fetch existing listing data
+  try {
+    const token = localStorage.getItem('gm_token');
+    const r = await fetch(`/api/listings/${editId}`, { headers: token ? { Authorization: 'Bearer ' + token } : {} });
+    const d = await r.json();
+    const l = d.listing || d;
+    if (!l || !l.businessName) return;
+
+    // Pre-fill Step 1
+    const set = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined && val !== null) el.value = val; };
+    const setName = (name, val) => { const el = document.querySelector(`[name="${name}"]`); if (el && val !== undefined) el.value = val; };
+
+    set('businessName', l.businessName);
+    set('category', l.category);
+    set('description', l.description);
+    setName('tagline', l.tagline);
+    if (document.getElementById('desc-count')) document.getElementById('desc-count').textContent = (l.description||'').length;
+
+    // Pre-fill Step 2
+    setName('phone', l.phone);
+    setName('whatsapp', l.whatsapp || l.phone);
+    const emailEl = document.getElementById('contact-email'); if (emailEl) emailEl.value = l.email || '';
+    setName('website', l.website);
+    setName('address', l.address);
+    set('country', l.country);
+    setName('city', l.city);
+
+    // Pre-fill Step 4 (social)
+    setName('instagram', l.instagram);
+    setName('facebook', l.facebook);
+    setName('twitter', l.twitter);
+    setName('tiktok', l.tiktok);
+    setName('linkedin', l.linkedin);
+    setName('youtube', l.youtube);
+
+    // Show existing images
+    if (l.images && l.images.length) {
+      const container = document.getElementById('image-previews');
+      if (container) {
+        container.innerHTML = l.images.map(url => `
+          <div class="image-preview-item">
+            <img src="${url}" alt="existing photo" style="object-fit:cover;width:100%;height:100%"/>
+            <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.6);font-size:0.7rem;text-align:center;padding:3px;color:#aaa">Existing</div>
+          </div>`).join('');
+      }
+    }
+
+  } catch(e) { console.warn('Edit prefill failed:', e); }
 })();
 
 // Step navigation
@@ -170,14 +236,18 @@ document.getElementById('post-ad-form')?.addEventListener('submit', async functi
     const headers = {};
     if (token) headers['Authorization'] = 'Bearer ' + token;
 
-    const res  = await fetch('/api/listings', { method: 'POST', headers, body: fd });
+    const isEdit = !!editListingId;
+    const res = isEdit
+      ? await fetch(`/api/listings/${editListingId}`, { method: 'PUT', headers, body: fd })
+      : await fetch('/api/listings', { method: 'POST', headers, body: fd });
     const data = await res.json();
 
     if (!res.ok) throw new Error(data.error || 'Failed to submit. Please try again.');
 
     // Success!
+    const listingId = isEdit ? editListingId : data.listing?.id;
     const viewBtn = document.getElementById('view-listing-btn');
-    if (viewBtn) viewBtn.href = `/business.html?id=${data.listing.id}`;
+    if (viewBtn && listingId) viewBtn.href = `/business.html?id=${listingId}`;
     showStep('success');
 
   } catch (err) {

@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>VyneMarket — The Global Business Marketplace</title>
 <meta name="description" content="VyneMarket is the free global marketplace to discover, showcase and connect with businesses worldwide. Watch business reels, browse catalogs, chat live — no account needed."/>
@@ -18,8 +20,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-</head>
-<body>
 <link rel="stylesheet" href="style.css"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -57,12 +57,13 @@
 <div class="mobile-menu" id="mobile-menu">
   <ul>
     <li><a href="/listings.html">Browse Businesses</a></li>
+    <li><a href="/reels.html">🎬 Reels</a></li>
     <li><a href="/listings.html?category=services">Services</a></li>
     <li><a href="/listings.html?category=ecommerce">E-Commerce</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
-      <li><a href="/referral.html" style="color:var(--brand)">🎁 Invite & Earn</a></li>
+    <li><a href="/referral.html" style="color:var(--brand)">🎁 Invite & Earn</a></li>
     <li><a href="#how">How It Works</a></li>
-    <li><a href="/login.html">Sign In</a></li>
+    <li><a href="/login.html" id="mobile-signin">Sign In</a></li>
     <li><a href="/post-ad.html" class="btn-primary" style="display:inline-block;margin-top:12px">+ List Your Business</a></li>
   </ul>
 </div>
@@ -441,5 +442,6 @@
 </footer>
 
 <script src="app.js"></script>
+<script src="/ux.js" defer></script>
 </body>
 </html>

@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Create Free Account — VyneMarket</title>
 
@@ -54,9 +56,10 @@
           <label>Business Name (optional)</label>
           <input type="text" name="businessName" placeholder="Your business name"/>
         </div>
-        <div class="form-group">
+        <div class="form-group" style="position:relative">
           <label>Password *</label>
-          <input type="password" name="password" placeholder="Min 6 characters" required minlength="6"/>
+          <input type="password" name="password" id="reg-password-input" placeholder="Min 6 characters" required minlength="6" style="padding-right:44px"/>
+          <button type="button" onclick="toggleRegPw()" style="position:absolute;right:14px;top:34px;background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:1.1rem;padding:0" aria-label="Show password">👁</button>
         </div>
         <div class="form-group" id="ref-group" style="display:none">
           <label>Invited by (referral code)</label>
@@ -99,11 +102,18 @@
       }).catch(()=>{});
   }
 
+  // Password toggle
+  window.toggleRegPw = function() {
+    const inp = document.getElementById('reg-password-input');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+    document.querySelector('[onclick="toggleRegPw()"]').textContent = inp.type === 'password' ? '👁' : '🙈';
+  };
+
   document.getElementById('register-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     const btn = document.getElementById('reg-btn');
     const err = document.getElementById('reg-error');
-    btn.disabled = true; btn.textContent = 'Creating account…';
+    btn.disabled = true; btn.innerHTML = '<span class="spin-inline">⟳</span> Creating account…';
     const fd = new FormData(this);
     try {
       const r = await fetch('/api/auth/register', {
@@ -114,13 +124,19 @@
       if (!r.ok) throw new Error(d.error);
       localStorage.setItem('gm_token', d.token);
       localStorage.setItem('gm_user', JSON.stringify(d.user));
+      btn.innerHTML = '✅ Account created! Redirecting…';
       window.location = '/post-ad.html';
     } catch(ex) {
       err.textContent = ex.message; err.style.display='block';
-      btn.disabled=false; btn.textContent='🚀 Create Free Account';
+      btn.disabled=false; btn.innerHTML='🚀 Create Free Account';
     }
   });
 })();
 </script>
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+.spin-inline { display:inline-block; animation: spin 0.7s linear infinite; }
+</style>
+<script src="/ux.js" defer></script>
 </body>
 </html>

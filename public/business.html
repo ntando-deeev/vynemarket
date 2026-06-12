@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title id="page-title">Business — VyneMarket</title>
 <meta name="description" content="View this business on VyneMarket — the free global business marketplace."/>
@@ -89,6 +91,7 @@
               <div class="biz-stat"><span id="view-count">0</span><span>views</span></div>
               <div class="biz-stat"><span id="save-count">0</span><span>saves</span></div>
               <button class="save-btn" id="save-btn" onclick="toggleSave()">🤍 Save</button>
+              <button class="save-btn" onclick="shareBusiness()" style="background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3)">🔗 Share</button>
             </div>
           </div>
 
@@ -209,5 +212,6 @@
 
 <script src="app.js"></script>
 <script src="business.js"></script>
+<script src="/ux.js" defer></script>
 </body>
 </html>

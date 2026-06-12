@@ -140,6 +140,19 @@ async function loadListings(append = false) {
 
 window.loadMore = () => loadListings(true);
 
+// ── Clear filters ─────────────────────────────────────
+window.clearFilters = function() {
+  const si = document.getElementById('search-input');
+  const cf = document.getElementById('category-filter');
+  const ctf = document.getElementById('country-filter');
+  const sf = document.getElementById('sort-filter');
+  if (si) si.value = '';
+  if (cf) cf.value = 'all';
+  if (ctf) ctf.value = '';
+  if (sf) sf.value = 'newest';
+  applyFilters();
+};
+
 // ── Init ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   setInputsFromParams();

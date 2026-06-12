@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Browse Businesses — VyneMarket</title>
 <meta name="description" content="Discover thousands of businesses worldwide on VyneMarket — the free business marketplace. Search by category, country, and more. Watch business video reels."/>
@@ -117,11 +119,14 @@
 
     <div class="listings-grid" id="listings-grid"></div>
 
-    <div class="empty-state" id="empty-state" style="display:none">
+    <div class="empty-state" id="empty-state" style="display:none;text-align:center;padding:60px 20px">
       <div style="font-size:3.5rem;margin-bottom:20px">🔍</div>
-      <h3>No businesses found</h3>
-      <p>Try adjusting your filters or be the first to list a business in this category!</p>
-      <a href="/post-ad.html" class="btn-primary" style="margin-top:20px;display:inline-block">List Your Business Free →</a>
+      <h3 style="font-size:1.4rem;font-weight:700;margin-bottom:10px">No businesses found</h3>
+      <p style="color:var(--text-muted);margin-bottom:24px">Try adjusting your filters or search terms, or be the first to list a business here!</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button onclick="clearFilters()" class="btn-ghost">✕ Clear Filters</button>
+        <a href="/post-ad.html" class="btn-primary">+ List Your Business Free</a>
+      </div>
     </div>
 
     <div id="load-more-wrap" style="text-align:center;margin-top:36px;display:none">
@@ -140,5 +145,6 @@
 
 <script src="app.js"></script>
 <script src="listings.js"></script>
+<script src="/ux.js" defer></script>
 </body>
 </html>

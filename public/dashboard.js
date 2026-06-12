@@ -72,6 +72,7 @@ async function loadMyListings(user) {
       </div>
       <div class="my-listing-actions">
         <a href="/business.html?id=${l.id}">👁 View</a>
+        <a href="/post-ad.html?edit=${l.id}" style="background:rgba(124,58,237,0.15);color:var(--brand);border:1px solid rgba(124,58,237,0.3);border-radius:8px;padding:6px 14px;font-size:0.82rem;font-weight:600;transition:background 0.2s" onmouseover="this.style.background='rgba(124,58,237,0.28)'" onmouseout="this.style.background='rgba(124,58,237,0.15)'">✏️ Edit</a>
         <button class="del-btn" onclick="deleteListing('${l.id}', this)">🗑 Delete</button>
       </div>
     </div>`;
