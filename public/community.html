@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>My Community — GrowthMarket Business Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="dashboard.css"/>
+<style>
+.community-page { padding: 32px 0 80px; }
+.community-grid { display: grid; grid-template-columns: 340px 1fr; gap: 28px; }
+@media(max-width:900px){ .community-grid { grid-template-columns: 1fr; } }
+.invite-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+.invite-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+.invite-link-box { background: rgba(0,200,150,0.08); border: 1px dashed var(--brand); border-radius: 10px; padding: 14px 16px; font-family: monospace; font-size: 0.85rem; word-break: break-all; color: var(--brand); margin: 16px 0; }
+.qr-placeholder { width: 140px; height: 140px; border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 3rem; margin: 12px auto; }
+.followers-panel { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+.follower-row { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border-light, rgba(255,255,255,0.06)); }
+.follower-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--brand); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #0A0F1E; font-size: 1rem; flex-shrink: 0; }
+.broadcast-form { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-top: 24px; }
+.broadcast-form textarea { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; color: var(--text); font-family: inherit; font-size: 0.95rem; resize: vertical; margin: 10px 0 14px; box-sizing: border-box; }
+.past-broadcasts { margin-top: 24px; }
+.broadcast-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 12px; }
+.broadcast-item h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+.broadcast-item p { font-size: 0.88rem; color: var(--text-muted); }
+.broadcast-item .bc-meta { font-size: 0.78rem; color: var(--text-dim, #888); margin-top: 8px; }
+.pro-gate { text-align: center; padding: 80px 20px; }
+.pro-gate h2 { margin-bottom: 12px; }
+.pro-gate p { color: var(--text-muted); margin-bottom: 28px; }
+.stamp-section { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-top: 24px; }
+.stamp-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+.stamp-dot { width: 36px; height: 36px; border-radius: 50%; background: var(--surface); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+.stamp-dot.earned { background: var(--brand); border-color: var(--brand); }
+.listing-select { width: 100%; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: inherit; font-size: 0.95rem; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+<nav class="nav scrolled">
+  <div class="nav-inner">
+    <a href="/" class="logo"><span class="logo-icon">🌍</span><span class="logo-text">GrowthMarket</span></a>
+    <ul class="nav-links">
+      <li><a href="/dashboard.html">Dashboard</a></li>
+      <li><a href="/listings.html">Browse</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="/post-ad.html" class="btn-primary">+ List Business</a>
+      <button class="btn-ghost" onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+</nav>
+
+<div id="auth-check" style="display:flex;align-items:center;justify-content:center;min-height:100vh">
+  <div class="spinner" style="width:40px;height:40px;border-width:3px"></div>
+</div>
+
+<main id="community-main" style="display:none" class="community-page">
+  <div class="container">
+    <div class="dashboard-header">
+      <div>
+        <h1>🤝 Business Community</h1>
+        <p style="color:var(--text-muted)">Manage your community, invite customers, and broadcast updates.</p>
+      </div>
+      <a href="/pricing.html" class="btn-hero-ghost" id="upgrade-btn" style="display:none">⚡ Upgrade Plan</a>
+    </div>
+
+    <!-- Pro gate -->
+    <div id="pro-gate" class="pro-gate" style="display:none">
+      <div style="font-size:3.5rem;margin-bottom:16px">🔒</div>
+      <h2>Business Pro Feature</h2>
+      <p>Customer invites, community feed, and broadcasts are available on <strong>Business Pro ($9.99/month)</strong> and <strong>Growth Suite ($19.99/month)</strong>.</p>
+      <a href="/pricing.html" class="btn-hero-primary">Upgrade Now — $9.99/mo →</a>
+      <div style="margin-top:16px"><a href="/dashboard.html" class="btn-ghost">← Back to Dashboard</a></div>
+    </div>
+
+    <!-- Main community UI -->
+    <div id="community-ui" style="display:none">
+
+      <div style="margin-bottom: 20px;">
+        <label style="font-weight:600;margin-bottom:8px;display:block">Select Listing</label>
+        <select id="listing-select" class="listing-select" onchange="loadCommunity(this.value)">
+          <option value="">Select a listing…</option>
+        </select>
+      </div>
+
+      <div class="community-grid" id="community-content" style="display:none">
+
+        <!-- LEFT: Invite + Stamps -->
+        <div>
+          <div class="invite-card">
+            <h3>📨 Customer Invite Link</h3>
+            <p style="font-size:0.88rem;color:var(--text-muted)">Share this link with customers to grow your community.</p>
+            <div class="invite-link-box" id="invite-link-box">Loading…</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="btn-primary" onclick="copyInviteLink()" style="flex:1">📋 Copy Link</button>
+              <button class="btn-ghost" onclick="shareWhatsApp()" style="flex:1">💬 WhatsApp</button>
+            </div>
+            <div style="margin-top:20px;text-align:center">
+              <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:8px">QR Code for your listing</p>
+              <div class="qr-placeholder" id="qr-box">📲</div>
+              <p style="font-size:0.78rem;color:var(--text-dim,#888)">Print on packaging or display in store</p>
+            </div>
+            <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);text-align:center">
+              <span style="font-size:1.4rem;font-weight:800;color:var(--brand)" id="invite-uses">0</span>
+              <span style="font-size:0.85rem;color:var(--text-muted);margin-left:6px">people joined via invite</span>
+            </div>
+          </div>
+
+          <div class="stamp-section" id="stamp-section">
+            <h3>🎟️ Loyalty Stamp Card</h3>
+            <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:4px">Customers collect stamps with every visit/purchase.</p>
+            <div class="stamp-row" id="stamp-row">
+              <!-- 10 stamps shown -->
+            </div>
+            <p style="font-size:0.8rem;color:var(--brand)">Share a stamp with a customer after their purchase.</p>
+            <div style="margin-top:14px">
+              <label style="font-size:0.85rem;font-weight:600;display:block;margin-bottom:6px">Customer ID or Email (to stamp)</label>
+              <div style="display:flex;gap:8px">
+                <input type="text" id="stamp-customer" placeholder="Customer email or ID" style="flex:1;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.9rem;"/>
+                <button class="btn-primary" onclick="giveStamp()" style="white-space:nowrap">Give Stamp</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Followers + Broadcasts -->
+        <div>
+          <div class="followers-panel">
+            <h3 style="margin-bottom:18px">👥 Followers (<span id="follower-count">0</span>)</h3>
+            <div id="followers-list"><p style="color:var(--text-muted);font-size:0.9rem">No followers yet. Share your invite link to grow your community!</p></div>
+          </div>
+
+          <div class="broadcast-form">
+            <h3>📢 Broadcast to Followers</h3>
+            <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:8px">Send an update to everyone in your community instantly.</p>
+            <input type="text" id="bc-title" placeholder="Broadcast title (e.g. 🔥 50% OFF Sale Today!)" style="width:100%;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;font-size:0.95rem;box-sizing:border-box;"/>
+            <textarea id="bc-message" rows="4" placeholder="Write your message here… Tell your followers about a new product, sale, or update."></textarea>
+            <button class="btn-hero-primary" onclick="sendBroadcast()" style="width:100%">📤 Send Broadcast</button>
+          </div>
+
+          <div class="past-broadcasts">
+            <h3 style="margin:24px 0 14px">📬 Past Broadcasts</h3>
+            <div id="broadcasts-list"><p style="color:var(--text-muted);font-size:0.9rem">No broadcasts yet.</p></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script src="app.js"></script>
+<script>
+function logout() { if(typeof Auth!=='undefined') Auth.logout(); else { localStorage.clear(); location.href='/'; } }
+
+let currentListingId = null;
+let currentInviteUrl = null;
+
+async function init() {
+  const token = localStorage.getItem('gm_token');
+  if (!token) { window.location.href = '/login.html?redirect=/community.html'; return; }
+
+  // Check plan
+  const meRes  = await fetch('/api/auth/me', { headers: { Authorization: 'Bearer ' + token } });
+  const me     = await meRes.json();
+  document.getElementById('auth-check').style.display = 'none';
+  document.getElementById('community-main').style.display = 'block';
+
+  const hasPro = ['pro','growth'].includes(me.plan);
+  if (!hasPro) {
+    document.getElementById('pro-gate').style.display = 'block';
+    return;
+  }
+
+  document.getElementById('community-ui').style.display = 'block';
+
+  // Load my listings
+  const listRes  = await fetch('/api/listings?ownerId=' + me.id + '&limit=50');
+  const listData = await listRes.json();
+  const sel      = document.getElementById('listing-select');
+  listData.listings.forEach(l => {
+    const opt = document.createElement('option');
+    opt.value = l.id; opt.textContent = l.businessName;
+    sel.appendChild(opt);
+  });
+  if (listData.listings.length === 1) {
+    sel.value = listData.listings[0].id;
+    loadCommunity(listData.listings[0].id);
+  }
+}
+
+async function loadCommunity(listingId) {
+  if (!listingId) return;
+  currentListingId = listingId;
+  const token = localStorage.getItem('gm_token');
+  document.getElementById('community-content').style.display = 'grid';
+
+  // Invite
+  const invRes  = await fetch('/api/listings/' + listingId + '/invite', { method:'POST', headers:{ Authorization:'Bearer '+token }});
+  const invData = await invRes.json();
+  if (invData.success) {
+    const url = window.location.origin + invData.inviteUrl;
+    currentInviteUrl = url;
+    document.getElementById('invite-link-box').textContent = url;
+    document.getElementById('invite-uses').textContent = invData.invite.uses || 0;
+    // Generate QR via external API
+    document.getElementById('qr-box').innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(url)}&size=120x120&bgcolor=0A0F1E&color=00C896" style="border-radius:8px;width:120px;height:120px"/>`;
+  }
+
+  // Followers
+  const folRes  = await fetch('/api/listings/' + listingId + '/followers', { headers:{ Authorization:'Bearer '+token }});
+  const folData = await folRes.json();
+  document.getElementById('follower-count').textContent = folData.total || 0;
+  const folList = document.getElementById('followers-list');
+  if (folData.followers?.length) {
+    folList.innerHTML = folData.followers.map(f => `
+      <div class="follower-row">
+        <div class="follower-avatar">${(f.name||'?')[0].toUpperCase()}</div>
+        <div>
+          <div style="font-weight:600;font-size:0.9rem">${f.name}</div>
+          <div style="font-size:0.78rem;color:var(--text-muted)">${f.country||''} · Joined ${new Date(f.followedAt).toLocaleDateString()}</div>
+        </div>
+      </div>`).join('');
+  } else {
+    folList.innerHTML = '<p style="color:var(--text-muted);font-size:0.9rem">No followers yet. Share your invite link!</p>';
+  }
+
+  // Broadcasts
+  loadBroadcasts(listingId);
+
+  // Stamps visual (decorative 10 dots)
+  const stampRow = document.getElementById('stamp-row');
+  stampRow.innerHTML = Array.from({length:10}, (_,i) => `<div class="stamp-dot">${i<3?'⭐':''}</div>`).join('');
+}
+
+async function loadBroadcasts(listingId) {
+  const res  = await fetch('/api/listings/' + listingId + '/broadcasts');
+  const data = await res.json();
+  const list = document.getElementById('broadcasts-list');
+  if (data.length) {
+    list.innerHTML = data.map(b => `
+      <div class="broadcast-item">
+        <h4>${b.title}</h4>
+        <p>${b.message}</p>
+        <div class="bc-meta">${new Date(b.createdAt).toLocaleString()}</div>
+      </div>`).join('');
+  } else {
+    list.innerHTML = '<p style="color:var(--text-muted);font-size:0.9rem">No broadcasts yet.</p>';
+  }
+}
+
+async function sendBroadcast() {
+  const title   = document.getElementById('bc-title').value.trim();
+  const message = document.getElementById('bc-message').value.trim();
+  if (!title || !message) { alert('Please add a title and message.'); return; }
+  if (!currentListingId) { alert('Select a listing first.'); return; }
+  const token = localStorage.getItem('gm_token');
+  const res   = await fetch('/api/listings/' + currentListingId + '/broadcast', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+    body: JSON.stringify({ title, message })
+  });
+  const data = await res.json();
+  if (data.success) {
+    document.getElementById('bc-title').value = '';
+    document.getElementById('bc-message').value = '';
+    showToast('Broadcast sent to all followers! 📢');
+    loadBroadcasts(currentListingId);
+  } else {
+    alert(data.error || 'Failed to send broadcast.');
+  }
+}
+
+function copyInviteLink() {
+  if (!currentInviteUrl) return;
+  navigator.clipboard.writeText(currentInviteUrl).then(() => showToast('Invite link copied! 📋'));
+}
+
+function shareWhatsApp() {
+  if (!currentInviteUrl) return;
+  window.open('https://wa.me/?text=' + encodeURIComponent('Join my business community on GrowthMarket: ' + currentInviteUrl));
+}
+
+async function giveStamp() {
+  alert('Stamp feature coming soon — customers will be able to collect stamps directly via the app.');
+}
+
+init();
+</script>
+</body>
+</html>

@@ -10,7 +10,11 @@ services:
         value: production
       - key: JWT_SECRET
         generateValue: true
+      - key: DATA_DIR
+        value: /opt/render/project/data
+      - key: UPLOADS_DIR
+        value: /opt/render/project/uploads
     disk:
-      name: data
-      mountPath: /opt/render/project/src/data
-      sizeGB: 1
+      name: growthmarket-data
+      mountPath: /opt/render/project
+      sizeGB: 5

@@ -71,10 +71,23 @@
       </div>
     </div>
 
+    <!-- Plan Banner -->
+    <div id="plan-banner" style="display:none;background:linear-gradient(135deg,rgba(0,200,150,0.12),rgba(0,150,200,0.08));border:1px solid var(--brand);border-radius:14px;padding:16px 22px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div>
+        <span style="font-weight:700;color:var(--brand)" id="plan-label">🚀 Free Plan</span>
+        <span style="font-size:0.85rem;color:var(--text-muted);margin-left:10px">Unlock community features by upgrading</span>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a href="/community.html" class="btn-ghost" style="padding:8px 16px;font-size:0.88rem" id="community-btn">🤝 Community</a>
+        <a href="/pricing.html" class="btn-primary" style="padding:8px 16px;font-size:0.88rem" id="upgrade-plan-btn">⚡ Upgrade Plan</a>
+      </div>
+    </div>
+
     <!-- Tabs -->
     <div class="dashboard-tabs">
       <button class="dash-tab active" onclick="showTab('listings')">My Listings</button>
       <button class="dash-tab" onclick="showTab('messages')">Messages <span id="msg-badge" class="msg-badge" style="display:none"></span></button>
+      <button class="dash-tab" onclick="showTab('analytics')">📊 Analytics</button>
     </div>
 
     <!-- My Listings -->
@@ -97,9 +110,43 @@
         <p style="color:var(--text-muted)">When customers contact your businesses, messages will appear here.</p>
       </div>
     </div>
+
+    <!-- Analytics Tab -->
+    <div id="tab-analytics" class="tab-content" style="display:none">
+      <div style="margin-bottom:18px">
+        <label style="font-weight:600;margin-bottom:8px;display:block">Select Listing</label>
+        <select id="analytics-listing-sel" onchange="loadAnalytics(this.value)" style="padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;font-size:0.95rem;width:100%;max-width:400px">
+          <option value="">Select a listing…</option>
+        </select>
+      </div>
+      <div id="analytics-panel" style="display:none">
+        <div class="dashboard-stats" style="margin-bottom:28px">
+          <div class="stat-card"><span class="stat-icon">👁</span><div><div class="stat-num" id="an-views">0</div><div class="stat-lbl">Total Views</div></div></div>
+          <div class="stat-card"><span class="stat-icon">📩</span><div><div class="stat-num" id="an-leads">0</div><div class="stat-lbl">Leads</div></div></div>
+          <div class="stat-card"><span class="stat-icon">❤️</span><div><div class="stat-num" id="an-saves">0</div><div class="stat-lbl">Saves</div></div></div>
+          <div class="stat-card"><span class="stat-icon">⭐</span><div><div class="stat-num" id="an-rating">0</div><div class="stat-lbl">Rating</div></div></div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px">
+          <h3 style="margin-bottom:18px">Views &amp; Leads (Last 30 Days)</h3>
+          <canvas id="analytics-chart" height="120"></canvas>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:10px;text-align:center">Analytics update in real time as customers view your listing.</p>
+        </div>
+        <!-- Growth: export + competitor -->
+        <div style="display:flex;gap:14px;margin-top:20px;flex-wrap:wrap" id="growth-actions" style="display:none">
+          <button class="btn-ghost" onclick="exportLeads()" style="flex:1">📥 Export Leads (CSV)</button>
+          <button class="btn-ghost" onclick="viewCompetitors()" style="flex:1">🏆 Competitor Analytics</button>
+        </div>
+        <div id="competitor-panel" style="display:none;margin-top:20px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px">
+          <h3 style="margin-bottom:16px">🏆 Competitor Analytics</h3>
+          <div id="competitor-content"></div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <script src="app.js"></script>
 <script src="dashboard.js"></script>
 </body>

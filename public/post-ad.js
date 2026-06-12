@@ -1,14 +1,12 @@
-/* Post Ad JS */
+/* post-ad.js — GrowthMarket v3 */
 
 let currentStep = 1;
 
 // Nav update
 (function() {
-  const user = Auth?.getUser?.();
+  const user = (typeof Auth !== 'undefined') ? Auth.getUser?.() : null;
   const cta  = document.getElementById('nav-cta');
-  if (user && cta) {
-    cta.innerHTML = `<a href="/dashboard.html" class="btn-ghost">My Dashboard</a>`;
-  }
+  if (user && cta) cta.innerHTML = `<a href="/dashboard.html" class="btn-ghost">My Dashboard</a>`;
   const ham = document.getElementById('hamburger');
   const mob = document.getElementById('mobile-menu');
   ham?.addEventListener('click', () => mob?.classList.toggle('open'));
@@ -17,7 +15,10 @@ let currentStep = 1;
 // Step navigation
 function showStep(n) {
   document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
-  document.getElementById('step-' + n)?.classList.add('active');
+  const el = (typeof n === 'string')
+    ? document.getElementById('step-' + n)
+    : document.getElementById('step-' + n);
+  if (el) el.classList.add('active');
 
   document.querySelectorAll('.progress-step').forEach(el => {
     const s = parseInt(el.dataset.step);
@@ -25,39 +26,39 @@ function showStep(n) {
     if (s === n) el.classList.add('active');
     else if (s < n) el.classList.add('done');
   });
-  currentStep = n;
+  if (typeof n === 'number') currentStep = n;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function nextStep(n) {
-  if (!validateStep(currentStep)) return;
-  showStep(n);
-}
-
+function nextStep(n) { if (!validateStep(currentStep)) return; showStep(n); }
 function prevStep(n) { showStep(n); }
-
 window.nextStep = nextStep;
 window.prevStep = prevStep;
 
-// Validation
 function validateStep(step) {
   if (step === 1) {
     const name = document.getElementById('businessName')?.value.trim();
     const cat  = document.getElementById('category')?.value;
     const desc = document.getElementById('description')?.value.trim();
-    if (!name) { alert('Please enter a business name.'); return false; }
-    if (!cat)  { alert('Please select a category.'); return false; }
-    if (!desc || desc.length < 20) { alert('Please write a description (at least 20 characters).'); return false; }
+    if (!name) { showError('Please enter a business name.'); return false; }
+    if (!cat)  { showError('Please select a category.'); return false; }
+    if (!desc || desc.length < 20) { showError('Please write a description (at least 20 characters).'); return false; }
   }
   if (step === 2) {
     const country  = document.getElementById('country')?.value;
     const whatsapp = document.querySelector('[name="whatsapp"]')?.value.trim();
     const phone    = document.querySelector('[name="phone"]')?.value.trim();
-    const email    = document.querySelector('[name="email"]')?.value.trim();
-    if (!country) { alert('Please select your country.'); return false; }
-    if (!whatsapp && !phone && !email) { alert('Please add at least one contact method (WhatsApp, phone, or email).'); return false; }
+    const email    = document.getElementById('contact-email')?.value.trim();
+    if (!country) { showError('Please select your country.'); return false; }
+    if (!whatsapp && !phone && !email) { showError('Please add at least one contact method (WhatsApp, phone, or email).'); return false; }
   }
   return true;
+}
+
+function showError(msg) {
+  const errEl = document.getElementById('submit-error');
+  if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; setTimeout(()=>errEl.style.display='none',5000); }
+  else alert(msg);
 }
 
 // Description char count
@@ -68,6 +69,7 @@ document.getElementById('description')?.addEventListener('input', function() {
 // Image preview
 window.previewImages = function(input) {
   const container = document.getElementById('image-previews');
+  if (!container) return;
   container.innerHTML = '';
   Array.from(input.files).slice(0,8).forEach((file, i) => {
     const url = URL.createObjectURL(file);
@@ -86,36 +88,34 @@ window.removeImage = function(idx) {
   previewImages(input);
 };
 
-// Video preview
 window.previewVideos = function(input) {
   const box = document.getElementById('video-names');
-  box.innerHTML = Array.from(input.files).map(f => `<div>🎬 ${f.name}</div>`).join('');
+  if (box) box.innerHTML = Array.from(input.files).map(f => `<div>🎬 ${f.name}</div>`).join('');
 };
 
-// Submit form
+// Submit
 document.getElementById('post-ad-form')?.addEventListener('submit', async function(e) {
   e.preventDefault();
-  if (!validateStep(4)) return;
 
-  const btn     = document.getElementById('submit-btn');
-  const txtEl   = document.getElementById('submit-text');
-  const spinEl  = document.getElementById('submit-spinner');
-  const errEl   = document.getElementById('submit-error');
+  const btn    = document.getElementById('submit-btn');
+  const txtEl  = document.getElementById('submit-text');
+  const spinEl = document.getElementById('submit-spinner');
+  const errEl  = document.getElementById('submit-error');
 
-  btn.disabled  = true;
-  txtEl.style.display  = 'none';
-  spinEl.style.display = 'inline-block';
-  errEl.style.display  = 'none';
+  btn.disabled = true;
+  if (txtEl)  txtEl.style.display  = 'none';
+  if (spinEl) spinEl.style.display = 'inline-block';
+  if (errEl)  errEl.style.display  = 'none';
 
   try {
-    // Handle optional registration
+    // Optional registration flow
     const regName  = document.getElementById('reg-name')?.value.trim();
     const regEmail = document.getElementById('reg-email')?.value.trim();
     const regPass  = document.getElementById('reg-password')?.value;
-    let token = Auth.getToken();
+    let token = (typeof Auth !== 'undefined') ? Auth.getToken() : localStorage.getItem('gm_token');
 
     if (!token && regName && regEmail && regPass) {
-      const regRes = await fetch('/api/auth/register', {
+      const regRes  = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: regName, email: regEmail, password: regPass })
@@ -128,9 +128,9 @@ document.getElementById('post-ad-form')?.addEventListener('submit', async functi
       }
     }
 
-    // Build form data
+    // Build form data — contact email uses contact-email field id, but name="email" for server
     const fd = new FormData(this);
-    // Remove registration fields from form data
+    // Clean up internal registration fields
     fd.delete('reg_name'); fd.delete('reg_email'); fd.delete('reg_password');
 
     const headers = {};
@@ -139,18 +139,19 @@ document.getElementById('post-ad-form')?.addEventListener('submit', async functi
     const res  = await fetch('/api/listings', { method: 'POST', headers, body: fd });
     const data = await res.json();
 
-    if (!res.ok) throw new Error(data.error || 'Failed to submit');
+    if (!res.ok) throw new Error(data.error || 'Failed to submit. Please try again.');
 
-    // Success
+    // Success!
     const viewBtn = document.getElementById('view-listing-btn');
     if (viewBtn) viewBtn.href = `/business.html?id=${data.listing.id}`;
     showStep('success');
 
   } catch (err) {
-    errEl.textContent   = err.message || 'Something went wrong. Please try again.';
-    errEl.style.display = 'block';
-    btn.disabled        = false;
-    txtEl.style.display = 'inline';
-    spinEl.style.display= 'none';
+    const msg = err.message || 'Something went wrong. Please try again.';
+    if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
+    else alert(msg);
+    btn.disabled = false;
+    if (txtEl)  txtEl.style.display  = 'inline';
+    if (spinEl) spinEl.style.display = 'none';
   }
 });

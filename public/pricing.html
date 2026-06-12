@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Pricing — GrowthMarket</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+<style>
+.pricing-page { padding: 80px 0 120px; }
+.pricing-hero { text-align: center; margin-bottom: 60px; }
+.pricing-hero h1 { font-size: clamp(2rem,5vw,3.5rem); font-weight: 800; margin-bottom: 16px; }
+.pricing-hero p { font-size: 1.15rem; color: var(--text-muted); max-width: 560px; margin: 0 auto; }
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1000px; margin: 0 auto; }
+@media(max-width:768px){ .pricing-grid { grid-template-columns: 1fr; } }
+.plan-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 36px 28px; position: relative; transition: transform .2s, border-color .2s; }
+.plan-card:hover { transform: translateY(-4px); border-color: var(--brand); }
+.plan-card.popular { border-color: var(--brand); background: linear-gradient(135deg, rgba(0,200,150,0.07), var(--card)); }
+.plan-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--brand); color: #0A0F1E; font-size: 0.75rem; font-weight: 700; padding: 4px 14px; border-radius: 20px; white-space: nowrap; }
+.plan-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+.plan-price { font-size: 2.8rem; font-weight: 800; color: var(--brand); line-height: 1; }
+.plan-price span { font-size: 1rem; font-weight: 500; color: var(--text-muted); }
+.plan-desc { font-size: 0.9rem; color: var(--text-muted); margin: 14px 0 24px; min-height: 40px; }
+.plan-features { list-style: none; padding: 0; margin: 0 0 28px; display: flex; flex-direction: column; gap: 10px; }
+.plan-features li { font-size: 0.9rem; color: var(--text-muted); display: flex; gap: 10px; align-items: flex-start; }
+.plan-features li .fi { color: var(--brand); font-style: normal; flex-shrink: 0; }
+.plan-features li .fi.off { color: #555; }
+.plan-btn { display: block; width: 100%; text-align: center; padding: 13px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: none; transition: opacity .2s; }
+.plan-btn.primary { background: var(--brand); color: #0A0F1E; }
+.plan-btn.ghost   { background: transparent; border: 1.5px solid var(--border); color: var(--text); }
+.plan-btn:hover { opacity: 0.85; }
+.plan-btn:disabled { opacity: 0.5; cursor: default; }
+.upgrade-confirm { background: rgba(0,200,150,0.1); border: 1px solid var(--brand); border-radius: 12px; padding: 16px; text-align: center; margin-top: 12px; display: none; font-size: 0.9rem; color: var(--brand); }
+.faq-section { max-width: 700px; margin: 80px auto 0; }
+.faq-section h2 { text-align:center; margin-bottom:32px; font-size:1.8rem; }
+.faq-item { border-bottom: 1px solid var(--border); padding: 20px 0; }
+.faq-q { font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; }
+.faq-a { color: var(--text-muted); font-size: 0.92rem; margin-top: 12px; line-height: 1.7; display: none; }
+.faq-a.open { display: block; }
+</style>
+</head>
+<body>
+<nav class="nav scrolled">
+  <div class="nav-inner">
+    <a href="/" class="logo"><span class="logo-icon">🌍</span><span class="logo-text">GrowthMarket</span></a>
+    <ul class="nav-links">
+      <li><a href="/listings.html">Browse Businesses</a></li>
+    </ul>
+    <div class="nav-cta" id="nav-cta">
+      <a href="/login.html" class="btn-ghost">Sign In</a>
+      <a href="/post-ad.html" class="btn-primary">+ List Business</a>
+    </div>
+  </div>
+</nav>
+
+<main class="pricing-page">
+  <div class="container">
+    <div class="pricing-hero">
+      <div class="hero-badge" style="display:inline-flex;margin-bottom:20px"><span class="badge-dot"></span> Simple, transparent pricing</div>
+      <h1>Grow Your Business<br/><span class="gradient-text">Worldwide</span></h1>
+      <p>Start free forever. Unlock powerful features to invite customers, track analytics, and dominate your category.</p>
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- FREE -->
+      <div class="plan-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">$0 <span>/month</span></div>
+        <div class="plan-desc">Everything you need to get started and get found globally.</div>
+        <ul class="plan-features">
+          <li><i class="fi">✓</i> Business listing — live instantly</li>
+          <li><i class="fi">✓</i> Up to 8 photos + 2 videos</li>
+          <li><i class="fi">✓</i> Full analytics dashboard</li>
+          <li><i class="fi">✓</i> Featured badge on listing</li>
+          <li><i class="fi">✓</i> SEO-optimised profile page</li>
+          <li><i class="fi">✓</i> Priority search ranking</li>
+          <li><i class="fi">✓</i> Contact messages from customers</li>
+          <li><i class="fi off">✗</i> Customer invite links &amp; QR codes</li>
+          <li><i class="fi off">✗</i> Community feed &amp; broadcasts</li>
+          <li><i class="fi off">✗</i> Loyalty stamp cards</li>
+          <li><i class="fi off">✗</i> Lead export (CSV)</li>
+          <li><i class="fi off">✗</i> Competitor analytics</li>
+          <li><i class="fi off">✗</i> Sponsored placement</li>
+        </ul>
+        <button class="plan-btn ghost" onclick="selectPlan('free')" id="btn-free">Current Plan</button>
+      </div>
+
+      <!-- BUSINESS PRO -->
+      <div class="plan-card popular">
+        <span class="plan-badge">🔥 Most Popular</span>
+        <div class="plan-name">Business Pro</div>
+        <div class="plan-price">$9.99 <span>/month</span></div>
+        <div class="plan-desc">Invite your customers and build a loyal community around your brand.</div>
+        <ul class="plan-features">
+          <li><i class="fi">✓</i> Everything in Free</li>
+          <li><i class="fi">✓</i> <strong>Customer invite link &amp; QR code</strong></li>
+          <li><i class="fi">✓</i> <strong>Private community feed</strong></li>
+          <li><i class="fi">✓</i> <strong>Broadcast announcements to followers</strong></li>
+          <li><i class="fi">✓</i> <strong>Loyalty stamp card system</strong></li>
+          <li><i class="fi">✓</i> <strong>Custom URL slug for your listing</strong></li>
+          <li><i class="fi off">✗</i> Lead export (CSV)</li>
+          <li><i class="fi off">✗</i> Competitor analytics</li>
+          <li><i class="fi off">✗</i> Verified business badge</li>
+          <li><i class="fi off">✗</i> Sponsored placement in search</li>
+          <li><i class="fi off">✗</i> Custom CTA button (Book Now etc.)</li>
+        </ul>
+        <button class="plan-btn primary" onclick="selectPlan('pro')" id="btn-pro">Upgrade to Pro →</button>
+        <div class="upgrade-confirm" id="confirm-pro">✅ You're now on Business Pro!</div>
+      </div>
+
+      <!-- GROWTH SUITE -->
+      <div class="plan-card">
+        <div class="plan-name">Growth Suite</div>
+        <div class="plan-price">$19.99 <span>/month</span></div>
+        <div class="plan-desc">The full toolkit to dominate your category and convert leads into customers.</div>
+        <ul class="plan-features">
+          <li><i class="fi">✓</i> Everything in Business Pro</li>
+          <li><i class="fi">✓</i> <strong>Lead export to CSV</strong></li>
+          <li><i class="fi">✓</i> <strong>Competitor analytics &amp; benchmarks</strong></li>
+          <li><i class="fi">✓</i> <strong>Verified business badge ✓</strong></li>
+          <li><i class="fi">✓</i> <strong>Sponsored/featured placement in search</strong></li>
+          <li><i class="fi">✓</i> <strong>Custom CTA button (Book Now, Order, etc.)</strong></li>
+          <li><i class="fi">✓</i> Everything from Pro plan included</li>
+        </ul>
+        <button class="plan-btn primary" onclick="selectPlan('growth')" id="btn-growth">Upgrade to Growth →</button>
+        <div class="upgrade-confirm" id="confirm-growth">✅ You're now on Growth Suite!</div>
+      </div>
+
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is the Free plan really free forever? <span>+</span></div><div class="faq-a">Yes — 100% free, no credit card required, no expiry. You can list your business and reach customers worldwide at no cost.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How does the customer invite feature work? <span>+</span></div><div class="faq-a">On Business Pro, you get a unique invite link and QR code for each listing. Share it on WhatsApp, Instagram, or print it on your packaging. Customers who click it join your community feed and get your broadcasts instantly.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is a broadcast? <span>+</span></div><div class="faq-a">A broadcast is a message you send to all your community followers at once — like a sale announcement, new product launch, or update. It shows up in their GrowthMarket feed.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What does competitor analytics show? <span>+</span></div><div class="faq-a">Growth Suite users can see how their listing performs vs. the category average — views, leads, ratings — and see the top 5 competitors in their category by traffic.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I cancel anytime? <span>+</span></div><div class="faq-a">Yes. You can downgrade to Free at any time. Your listing stays live, you just lose the paid features.</div></div>
+    </div>
+
+  </div>
+</main>
+
+<script src="app.js"></script>
+<script>
+function toggleFaq(el) {
+  const ans = el.nextElementSibling;
+  const arrow = el.querySelector('span');
+  ans.classList.toggle('open');
+  arrow.textContent = ans.classList.contains('open') ? '−' : '+';
+}
+
+async function selectPlan(plan) {
+  const token = (typeof Auth !== 'undefined') ? Auth.getToken() : localStorage.getItem('gm_token');
+  if (!token) {
+    alert('Please sign in or create a free account first.');
+    window.location.href = '/login.html?redirect=/pricing.html';
+    return;
+  }
+  const user = (typeof Auth !== 'undefined') ? Auth.getUser() : null;
+  if (user?.plan === plan) return;
+
+  const btn = document.getElementById('btn-' + plan);
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Processing…';
+
+  try {
+    const res  = await fetch('/api/auth/upgrade', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ plan })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Upgrade failed');
+
+    localStorage.setItem('gm_user', JSON.stringify(data.user));
+    const confirm = document.getElementById('confirm-' + plan);
+    if (confirm) confirm.style.display = 'block';
+    btn.textContent = '✓ Active';
+
+    // Update other buttons
+    ['free','pro','growth'].forEach(p => {
+      if (p !== plan) {
+        const b = document.getElementById('btn-' + p);
+        if (b) { b.disabled = false; b.textContent = p === 'free' ? 'Downgrade to Free' : (p === 'pro' ? 'Upgrade to Pro →' : 'Upgrade to Growth →'); }
+      }
+    });
+
+    setTimeout(() => { window.location.href = '/dashboard.html'; }, 1500);
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = originalText;
+    alert('Error: ' + err.message);
+  }
+}
+
+// Reflect current plan on load
+(function() {
+  const user = (typeof Auth !== 'undefined') ? Auth.getUser() : null;
+  if (!user) return;
+  const plan = user.plan || 'free';
+  ['free','pro','growth'].forEach(p => {
+    const btn = document.getElementById('btn-' + p);
+    if (!btn) return;
+    if (p === plan) { btn.textContent = 'Current Plan ✓'; btn.disabled = true; }
+    else if (p === 'free') btn.textContent = 'Downgrade to Free';
+  });
+})();
+</script>
+</body>
+</html>
