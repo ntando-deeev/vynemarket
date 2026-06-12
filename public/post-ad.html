@@ -267,7 +267,7 @@
         <!-- STEP 3: Photos -->
         <div class="form-step" id="step-3">
           <h2 class="step-title">Add photos &amp; videos</h2>
-          <p class="step-subtitle">Listings with photos get 3x more views. (Optional but highly recommended)</p>
+          <p class="step-subtitle">Listings with photos get 3× more views. Add a 30-second reel to appear in the Business Reels feed 🎬</p>
 
           <div class="form-fields">
             <div class="form-group">
@@ -282,12 +282,30 @@
               <input type="file" id="images" name="images" multiple accept="image/*" style="display:none" onchange="previewImages(this)"/>
               <div class="image-previews" id="image-previews"></div>
             </div>
+
+            <!-- 🎬 SAMPLE VIDEO / REEL — dedicated short intro -->
+            <div class="form-group" style="border:1.5px solid rgba(124,58,237,0.4);border-radius:16px;padding:20px;background:rgba(124,58,237,0.05)">
+              <label style="display:flex;align-items:center;gap:8px;font-size:1rem;font-weight:700">
+                🎬 Business Reel <span style="background:var(--brand);color:#fff;font-size:0.7rem;padding:2px 8px;border-radius:50px;font-weight:700">NEW</span>
+              </label>
+              <p style="font-size:0.85rem;color:var(--text-muted);margin:6px 0 14px">Upload a 30-second video sample of your business. It appears in the homepage Reels feed — huge visibility boost.</p>
+              <div class="upload-zone" id="sample-video-zone" onclick="document.getElementById('sampleVideo').click()">
+                <div class="upload-zone-inner">
+                  <span class="upload-icon">▶️</span>
+                  <p>Click to upload your 30-second reel</p>
+                  <span class="form-hint">MP4, MOV, WebM · Max 100MB · Vertical (9:16) looks best</span>
+                </div>
+              </div>
+              <input type="file" id="sampleVideo" name="sampleVideo" accept="video/mp4,video/quicktime,video/webm" style="display:none" onchange="previewSampleVideo(this)"/>
+              <div id="sample-video-preview" style="margin-top:12px"></div>
+            </div>
+
             <div class="form-group">
-              <label>Videos (up to 2 videos)</label>
+              <label>Gallery Videos (up to 2 additional videos)</label>
               <div class="upload-zone" id="video-upload-zone" onclick="document.getElementById('videos').click()">
                 <div class="upload-zone-inner">
                   <span class="upload-icon">🎬</span>
-                  <p>Click to upload videos</p>
+                  <p>Click to upload gallery videos</p>
                   <span class="form-hint">MP4, MOV, WebM · Max 50MB each</span>
                 </div>
               </div>

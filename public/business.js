@@ -40,6 +40,20 @@ function renderBusiness(l) {
   document.getElementById('page-title').textContent = l.businessName + ' — VyneMarket';
   document.getElementById('bc-name').textContent = l.businessName;
 
+  // Dynamic SEO meta
+  document.title = l.businessName + ' — VyneMarket';
+  let metaDesc = document.querySelector('meta[name="description"]');
+  if (!metaDesc) { metaDesc = document.createElement('meta'); metaDesc.name='description'; document.head.appendChild(metaDesc); }
+  metaDesc.content = (l.tagline||l.description||'').slice(0,160);
+  let ogTitle = document.querySelector('meta[property="og:title"]');
+  if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property','og:title'); document.head.appendChild(ogTitle); }
+  ogTitle.content = l.businessName + ' — VyneMarket';
+  if (l.images?.[0]) {
+    let ogImg = document.querySelector('meta[property="og:image"]');
+    if (!ogImg) { ogImg = document.createElement('meta'); ogImg.setAttribute('property','og:image'); document.head.appendChild(ogImg); }
+    ogImg.content = l.images[0];
+  }
+
   const cat = window.CATEGORIES_MAP?.[l.category] || { emoji:'🏪', name: l.category };
 
   // ── Full Media Catalog (Photos + Videos) ─────────────────────────

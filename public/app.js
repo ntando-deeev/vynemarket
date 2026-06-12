@@ -125,6 +125,7 @@ window.CATEGORIES_MAP = Object.fromEntries(CATEGORIES.map(c => [c.id, c]));
 
 function listingCard(l) {
   const cat  = window.CATEGORIES_MAP[l.category] || { emoji:'📦', name: l.category };
+  const hasVideo = !!(l.sampleVideo || (l.videos && l.videos.length > 0));
   const img  = l.images?.[0]
     ? `<img src="${l.images[0]}" alt="${l.businessName}" loading="lazy"/>`
     : `<div class="listing-card-img-placeholder">${cat.emoji}</div>`;
@@ -133,11 +134,13 @@ function listingCard(l) {
     : '';
   const price = l.price ? `<span class="listing-card-price">${l.currency || 'USD'} ${l.price}</span>` : '';
   const tags  = (l.tags||[]).slice(0,3).map(t=>`<span class="tag-chip">${t}</span>`).join('');
+  const videoBadge = hasVideo ? `<div class="listing-card-video-badge">▶ Video</div>` : '';
   return `
     <div class="listing-card" onclick="window.location='/business.html?id=${l.id}'">
       <div class="listing-card-img">
         ${img}
         <div class="listing-card-badge">${cat.emoji} ${cat.name}</div>
+        ${videoBadge}
       </div>
       <div class="listing-card-body">
         <div class="listing-card-title">${l.businessName}</div>
@@ -201,4 +204,147 @@ document.addEventListener('DOMContentLoaded', () => {
   loadStats();
   loadCategories();
   loadFeatured();
+  loadReels('all');
+  loadTrending();
 });
+
+// ── Business Reels ────────────────────────────────────
+let reelsOffset = 0;
+let reelsCat    = 'all';
+const REELS_LIMIT = 8;
+
+async function loadReels(cat, append = false) {
+  reelsCat = cat || 'all';
+  if (!append) reelsOffset = 0;
+  const grid  = document.getElementById('reels-grid');
+  const empty = document.getElementById('reels-empty');
+  const more  = document.getElementById('reels-load-more');
+  if (!grid) return;
+
+  if (!append) {
+    grid.innerHTML = Array(4).fill(0).map(()=>`
+      <div class="reel-card skeleton-reel">
+        <div class="reel-video-wrap skeleton-block" style="height:360px;border-radius:16px"></div>
+      </div>`).join('');
+  }
+
+  try {
+    const params = new URLSearchParams({ limit: REELS_LIMIT, offset: reelsOffset });
+    if (reelsCat && reelsCat !== 'all') params.set('category', reelsCat);
+    const r = await fetch('/api/reels?' + params);
+    const d = await r.json();
+
+    if (!append) grid.innerHTML = '';
+
+    if (!d.reels?.length && !append) {
+      empty?.classList.remove('hidden');
+      if (more) more.style.display = 'none';
+      return;
+    }
+    empty?.classList.add('hidden');
+
+    d.reels.forEach(reel => {
+      const div = document.createElement('div');
+      div.innerHTML = reelCard(reel);
+      grid.appendChild(div.firstElementChild);
+    });
+
+    reelsOffset += d.reels.length;
+    if (more) more.style.display = reelsOffset < d.total ? 'block' : 'none';
+
+    // Auto-play first reel on intersection
+    _initReelObserver();
+  } catch(e) {
+    console.error('Reels load error:', e);
+    if (!append && grid) grid.innerHTML = '';
+    empty?.classList.remove('hidden');
+  }
+}
+
+function reelCard(r) {
+  const cat = window.CATEGORIES_MAP?.[r.category] || { emoji:'📦', name: r.category };
+  const locParts = [r.city, r.country].filter(Boolean);
+  const loc = locParts.length ? `📍 ${locParts.join(', ')}` : '';
+  const stars = r.reviewCount > 0
+    ? `${'★'.repeat(Math.round(r.rating))}${'☆'.repeat(5-Math.round(r.rating))} (${r.reviewCount})`
+    : '';
+  return `
+    <div class="reel-card" onclick="window.location='/business.html?id=${r.id}'">
+      <div class="reel-video-wrap">
+        <video class="reel-video" src="${r.sampleVideo}" loop muted playsinline preload="metadata"
+          poster="${r.images?.[0] || ''}"></video>
+        <div class="reel-play-btn" id="reel-play-${r.id}">▶</div>
+        <div class="reel-overlay">
+          <div class="reel-cat-badge">${cat.emoji} ${cat.name}</div>
+          <div class="reel-info">
+            <div class="reel-biz-name">${r.businessName}</div>
+            ${r.tagline ? `<div class="reel-tagline">${r.tagline}</div>` : ''}
+            ${loc ? `<div class="reel-loc">${loc}</div>` : ''}
+            ${stars ? `<div class="reel-stars">${stars}</div>` : ''}
+          </div>
+          <div class="reel-stats">
+            <span>👁 ${r.views||0}</span>
+            <span>❤️ ${r.saves||0}</span>
+          </div>
+        </div>
+        <div class="reel-cta-overlay">
+          <span>View Business →</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+function _initReelObserver() {
+  if (!('IntersectionObserver' in window)) return;
+  document.querySelectorAll('.reel-video').forEach(video => {
+    if (video._observed) return;
+    video._observed = true;
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const playBtn = entry.target.parentElement.querySelector('.reel-play-btn');
+        if (entry.isIntersecting) {
+          entry.target.play().catch(()=>{});
+          if (playBtn) playBtn.style.display = 'none';
+        } else {
+          entry.target.pause();
+          if (playBtn) playBtn.style.display = 'flex';
+        }
+      });
+    }, { threshold: 0.6 });
+    obs.observe(video);
+
+    // Manual play/pause toggle
+    video.parentElement.addEventListener('click', function(e) {
+      if (e.target.closest('.reel-cta-overlay')) return; // let onclick bubble
+      e.stopPropagation();
+      const playBtn = this.querySelector('.reel-play-btn');
+      if (video.paused) { video.play().catch(()=>{}); if(playBtn) playBtn.style.display='none'; }
+      else { video.pause(); if(playBtn) playBtn.style.display='flex'; }
+    });
+  });
+}
+
+window.filterReels = function(cat, btn) {
+  document.querySelectorAll('.reel-cat-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  loadReels(cat, false);
+};
+
+window.loadMoreReels = function() {
+  loadReels(reelsCat, true);
+};
+
+// ── Trending Businesses ───────────────────────────────
+async function loadTrending() {
+  const grid = document.getElementById('trending-grid');
+  if (!grid) return;
+  try {
+    const r = await fetch('/api/listings?sort=popular&limit=6');
+    const d = await r.json();
+    if (!d.listings?.length) {
+      document.getElementById('trending')?.style.setProperty('display','none');
+      return;
+    }
+    grid.innerHTML = d.listings.map(l => listingCard(l)).join('');
+  } catch(e) { console.error(e); }
+}

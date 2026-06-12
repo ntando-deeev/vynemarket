@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard.html
+Disallow: /post-ad.html
+Disallow: /api/
+
+Sitemap: https://vynemarket.com/sitemap.xml

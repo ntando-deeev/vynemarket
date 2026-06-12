@@ -93,6 +93,40 @@ window.previewVideos = function(input) {
   if (box) box.innerHTML = Array.from(input.files).map(f => `<div>🎬 ${f.name}</div>`).join('');
 };
 
+window.previewSampleVideo = function(input) {
+  const box = document.getElementById('sample-video-preview');
+  const zone = document.getElementById('sample-video-zone');
+  if (!input.files[0]) return;
+  const file = input.files[0];
+  const url  = URL.createObjectURL(file);
+  if (box) {
+    box.innerHTML = `
+      <div style="position:relative;display:inline-block;max-width:200px;border-radius:12px;overflow:hidden;border:2px solid var(--brand)">
+        <video src="${url}" controls style="width:100%;display:block;max-height:320px;object-fit:cover"></video>
+        <div style="position:absolute;top:6px;right:6px">
+          <button type="button" onclick="clearSampleVideo()" style="background:rgba(0,0,0,0.7);border:none;color:#fff;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:0.9rem">✕</button>
+        </div>
+      </div>
+      <div style="font-size:0.8rem;color:var(--brand);font-weight:600;margin-top:6px">✅ Reel ready — you'll appear in the homepage feed!</div>`;
+  }
+  if (zone) {
+    const inner = zone.querySelector('.upload-zone-inner');
+    if (inner) inner.style.display = 'none';
+  }
+};
+
+window.clearSampleVideo = function() {
+  const input = document.getElementById('sampleVideo');
+  const box   = document.getElementById('sample-video-preview');
+  const zone  = document.getElementById('sample-video-zone');
+  if (input) input.value = '';
+  if (box)   box.innerHTML = '';
+  if (zone) {
+    const inner = zone.querySelector('.upload-zone-inner');
+    if (inner) inner.style.display = '';
+  }
+};
+
 // Submit
 document.getElementById('post-ad-form')?.addEventListener('submit', async function(e) {
   e.preventDefault();

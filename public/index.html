@@ -3,13 +3,23 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>VyneMarket — Discover & Share Businesses Worldwide</title>
-<meta name="description" content="VyneMarket is the free business directory where entrepreneurs share what they sell, find partners, and connect with customers worldwide. 100% free."/>
-
-
-
-
-
+<title>VyneMarket — The Global Business Marketplace</title>
+<meta name="description" content="VyneMarket is the free global marketplace to discover, showcase and connect with businesses worldwide. Watch business reels, browse catalogs, chat live — no account needed."/>
+<meta name="keywords" content="business directory, global marketplace, free listings, entrepreneurs, small business, shop online, business reels, business videos"/>
+<meta property="og:title" content="VyneMarket — The Global Business Marketplace"/>
+<meta property="og:description" content="Discover businesses worldwide. Watch short video samples, browse catalogs, chat live — free forever."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://vynemarket.com"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="VyneMarket — The Global Business Marketplace"/>
+<meta name="twitter:description" content="Discover & showcase businesses worldwide. Free forever."/>
+<link rel="canonical" href="https://vynemarket.com"/>
+<link rel="stylesheet" href="style.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
 <link rel="stylesheet" href="style.css"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -148,6 +158,63 @@
       <h3>No businesses yet — be the first!</h3>
       <p>VyneMarket is brand new. List your business today and get in front of early visitors.</p>
       <a href="/post-ad.html" class="btn-primary" style="margin-top:20px;display:inline-block">List Your Business Free →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     BUSINESS REELS — Short video samples
+     ══════════════════════════════════════ -->
+<section class="reels-section" id="reels">
+  <div class="container">
+    <div class="section-header-row">
+      <div>
+        <span class="section-eye">🎬 Video Samples</span>
+        <h2>Business <span class="gradient-text">Reels</span></h2>
+        <p class="section-sub-sm">Watch 30-second business previews — no account needed</p>
+      </div>
+      <div class="reels-filter-row" id="reels-filter-row">
+        <button class="reel-cat-btn active" data-cat="all" onclick="filterReels('all',this)">All</button>
+        <button class="reel-cat-btn" data-cat="fashion" onclick="filterReels('fashion',this)">👗 Fashion</button>
+        <button class="reel-cat-btn" data-cat="food" onclick="filterReels('food',this)">🍔 Food</button>
+        <button class="reel-cat-btn" data-cat="beauty" onclick="filterReels('beauty',this)">💄 Beauty</button>
+        <button class="reel-cat-btn" data-cat="services" onclick="filterReels('services',this)">🛠️ Services</button>
+        <button class="reel-cat-btn" data-cat="technology" onclick="filterReels('technology',this)">💻 Tech</button>
+      </div>
+    </div>
+
+    <!-- Reel feed: vertical scroll on mobile, grid on desktop -->
+    <div class="reels-grid" id="reels-grid">
+      <!-- Injected by JS -->
+    </div>
+    <div class="reels-empty hidden" id="reels-empty">
+      <div class="reels-empty-inner">
+        <span style="font-size:3rem">🎬</span>
+        <h3>No video samples yet</h3>
+        <p>Be the first business to upload a 30-second video sample and get seen by thousands.</p>
+        <a href="/post-ad.html" class="btn-primary" style="margin-top:16px">List Your Business + Add a Reel →</a>
+      </div>
+    </div>
+    <div class="reels-load-more" id="reels-load-more" style="display:none">
+      <button class="btn-ghost" onclick="loadMoreReels()">Load more reels ↓</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     TRENDING BUSINESSES
+     ══════════════════════════════════════ -->
+<section class="trending-section" id="trending">
+  <div class="container">
+    <div class="section-header-row">
+      <div>
+        <span class="section-eye">🔥 Hot Right Now</span>
+        <h2>Trending <span class="gradient-text">Businesses</span></h2>
+      </div>
+      <a href="/listings.html?sort=popular" class="btn-ghost">See All →</a>
+    </div>
+    <div class="listings-grid" id="trending-grid">
+      <!-- Injected by JS -->
     </div>
   </div>
 </section>
@@ -296,6 +363,20 @@
   </div>
 </section>
 
+<!-- VIDEO CTA BAND -->
+<section class="video-cta-band">
+  <div class="container">
+    <div class="video-cta-inner">
+      <div class="video-cta-icon">🎬</div>
+      <div class="video-cta-text">
+        <h3>Showcase Your Business in 30 Seconds</h3>
+        <p>Upload a short video sample to your listing — customers see you in action before they even contact you.</p>
+      </div>
+      <a href="/post-ad.html" class="btn-hero-primary" style="flex-shrink:0">Upload Your Reel →</a>
+    </div>
+  </div>
+</section>
+
 <!-- CTA BANNER -->
 <section class="cta-section">
   <div class="container">
@@ -328,6 +409,7 @@
         <h5>Explore</h5>
         <ul>
           <li><a href="/listings.html">Browse Businesses</a></li>
+          <li><a href="/#reels">🎬 Business Reels</a></li>
           <li><a href="/listings.html?category=services">Services</a></li>
           <li><a href="/listings.html?category=ecommerce">E-Commerce</a></li>
           <li><a href="/listings.html?category=food">Food & Beverages</a></li>

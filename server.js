@@ -213,17 +213,19 @@ app.get('/api/referral/validate/:code', (req,res)=>{
 });
 
 // LISTINGS
-app.post('/api/listings', optionalAuth, upload.fields([{name:'images',maxCount:8},{name:'videos',maxCount:2}]), (req,res)=>{
+app.post('/api/listings', optionalAuth, upload.fields([{name:'images',maxCount:8},{name:'videos',maxCount:2},{name:'sampleVideo',maxCount:1}]), (req,res)=>{
   try{
     const {businessName,category,description,tagline,price,currency,priceType,whatsapp,phone,email,website,location,country,city,instagram,tiktok,facebook,twitter,youtube,contactName,contactRole,tags,openHours,established,employees,customSlug,customCta,ctaLabel}=req.body;
     if(!businessName||!description||!category) return res.status(400).json({error:'businessName, category and description are required.'});
     const images=(req.files?.images||[]).map(f=>`/uploads/images/${f.filename}`);
     const videos=(req.files?.videos||[]).map(f=>`/uploads/videos/${f.filename}`);
+    const sampleVideoFile=(req.files?.sampleVideo||[])[0];
+    const sampleVideo=sampleVideoFile?`/uploads/videos/${sampleVideoFile.filename}`:null;
     let slug=null;
     if(customSlug&&req.user){const owner=readJSON(USERS_FILE).find(u=>u.id===req.user.id);if(userHasFeature(owner,'custom_slug')){const clean=customSlug.toLowerCase().replace(/[^a-z0-9-]/g,'');if(!readJSON(LISTINGS_FILE).find(l=>l.slug===clean))slug=clean;}}
     let ctaConfig=null;
     if(customCta&&req.user){const owner=readJSON(USERS_FILE).find(u=>u.id===req.user.id);if(userHasFeature(owner,'custom_cta'))ctaConfig={url:customCta,label:ctaLabel||'Contact Now'};}
-    const listing={id:uuidv4(),createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),status:'active',featured:false,sponsored:false,slug,ownerId:req.user?.id||null,ownerName:req.user?.name||contactName||null,businessName:businessName.trim(),tagline:tagline?.trim()||null,category,description:description.trim(),price:price||null,currency:currency||'USD',priceType:priceType||null,contact:{name:contactName||null,role:contactRole||null,whatsapp:whatsapp||null,phone:phone||null,email:email||null,website:website||null},location:location||null,country:country||null,city:city||null,social:{instagram:instagram||null,tiktok:tiktok||null,facebook:facebook||null,twitter:twitter||null,youtube:youtube||null},openHours:openHours||null,established:established||null,employees:employees||null,tags:tags?tags.split(',').map(t=>t.trim()).filter(Boolean):[],images,videos,views:0,leads:0,saves:0,reviewCount:0,rating:0,ctaConfig,analyticsHistory:[]};
+    const listing={id:uuidv4(),createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),status:'active',featured:false,sponsored:false,slug,ownerId:req.user?.id||null,ownerName:req.user?.name||contactName||null,businessName:businessName.trim(),tagline:tagline?.trim()||null,category,description:description.trim(),price:price||null,currency:currency||'USD',priceType:priceType||null,contact:{name:contactName||null,role:contactRole||null,whatsapp:whatsapp||null,phone:phone||null,email:email||null,website:website||null},location:location||null,country:country||null,city:city||null,social:{instagram:instagram||null,tiktok:tiktok||null,facebook:facebook||null,twitter:twitter||null,youtube:youtube||null},openHours:openHours||null,established:established||null,employees:employees||null,tags:tags?tags.split(',').map(t=>t.trim()).filter(Boolean):[],images,videos,sampleVideo,views:0,leads:0,saves:0,reviewCount:0,rating:0,ctaConfig,analyticsHistory:[]};
     const listings=readJSON(LISTINGS_FILE); listings.unshift(listing); writeJSON(LISTINGS_FILE,listings);
     if(req.user){const users=readJSON(USERS_FILE);const idx=users.findIndex(u=>u.id===req.user.id);if(idx!==-1){users[idx].listingCount=(users[idx].listingCount||0)+1;writeJSON(USERS_FILE,users);}}
     res.json({success:true,listing});
@@ -282,6 +284,55 @@ app.delete('/api/listings/:id', authMiddleware, (req,res)=>{
   if(idx===-1) return res.status(404).json({error:'Listing not found'});
   if(listings[idx].ownerId!==req.user.id) return res.status(403).json({error:'Forbidden'});
   listings[idx].status='deleted'; writeJSON(LISTINGS_FILE,listings);
+  res.json({success:true});
+});
+
+// ════════════════════════════════════════════════════════
+//  VIDEO SAMPLES — short intro clips, TikTok-style feed
+// ════════════════════════════════════════════════════════
+
+// GET featured reels: listings that have a sampleVideo, paginated
+app.get('/api/reels', (req,res)=>{
+  const limit  = Math.min(parseInt(req.query.limit)||12, 50);
+  const offset = parseInt(req.query.offset)||0;
+  const cat    = req.query.category||'';
+  let listings = readJSON(LISTINGS_FILE).filter(l=>l.status==='active' && l.sampleVideo);
+  if(cat && cat!=='all') listings=listings.filter(l=>l.category===cat);
+  listings.sort((a,b)=>((b.views||0)+(b.saves||0))-((a.views||0)+(a.saves||0)));
+  res.json({ total:listings.length, reels:listings.slice(offset,offset+limit).map(l=>({
+    id:l.id, businessName:l.businessName, tagline:l.tagline||null,
+    category:l.category, country:l.country||null, city:l.city||null,
+    sampleVideo:l.sampleVideo, sampleVideoThumb:l.sampleVideoThumb||null,
+    images:l.images||[], rating:l.rating||0, reviewCount:l.reviewCount||0,
+    views:l.views||0, saves:l.saves||0, ownerName:l.ownerName||null
+  }))});
+});
+
+// Upload a sample video for a listing (owner only)
+app.post('/api/listings/:id/sample-video', authMiddleware,
+  multer({ storage: multer.diskStorage({
+    destination:(req,file,cb)=>{ const d=path.join(UPLOADS_DIR,'videos'); fs.mkdirSync(d,{recursive:true}); cb(null,d); },
+    filename:(req,file,cb)=>cb(null, uuidv4()+path.extname(file.originalname))
+  }), fileFilter:(req,file,cb)=>cb(null,['video/mp4','video/quicktime','video/webm'].includes(file.mimetype)),
+  limits:{fileSize:100*1024*1024} }).single('video'),
+(req,res)=>{
+  if(!req.file) return res.status(400).json({error:'No video file uploaded.'});
+  const listings=readJSON(LISTINGS_FILE);
+  const idx=listings.findIndex(l=>l.id===req.params.id&&l.ownerId===req.user.id);
+  if(idx===-1) return res.status(404).json({error:'Listing not found or not yours.'});
+  listings[idx].sampleVideo=`/uploads/videos/${req.file.filename}`;
+  listings[idx].updatedAt=new Date().toISOString();
+  writeJSON(LISTINGS_FILE,listings);
+  res.json({success:true, sampleVideo:listings[idx].sampleVideo});
+});
+
+// DELETE sample video
+app.delete('/api/listings/:id/sample-video', authMiddleware, (req,res)=>{
+  const listings=readJSON(LISTINGS_FILE);
+  const idx=listings.findIndex(l=>l.id===req.params.id&&l.ownerId===req.user.id);
+  if(idx===-1) return res.status(404).json({error:'Not found.'});
+  listings[idx].sampleVideo=null;
+  writeJSON(LISTINGS_FILE,listings);
   res.json({success:true});
 });
 
@@ -722,6 +773,31 @@ io.on('connection', (socket)=>{
       if(sockets){ sockets.delete(socket.id); if(sockets.size===0) onlineUsers.delete(authedUser.id); }
     }
   });
+});
+
+// ── Dynamic Sitemap ──────────────────────────────────────────────
+app.get('/sitemap.xml', (req,res)=>{
+  const base = process.env.SITE_URL || 'https://vynemarket.com';
+  const listings = readJSON(LISTINGS_FILE).filter(l=>l.status==='active');
+  const staticPages = ['','/listings.html','/pricing.html','/referral.html','/register.html','/login.html'];
+  const listingUrls = listings.map(l=>`
+  <url>
+    <loc>${base}/business.html?id=${l.id}</loc>
+    <lastmod>${(l.updatedAt||l.createdAt||new Date().toISOString()).slice(0,10)}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`).join('');
+  const staticUrls = staticPages.map(p=>`
+  <url>
+    <loc>${base}${p}</loc>
+    <changefreq>daily</changefreq>
+    <priority>${p===''?'1.0':'0.6'}</priority>
+  </url>`).join('');
+  res.setHeader('Content-Type','application/xml');
+  res.send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${staticUrls}${listingUrls}
+</urlset>`);
 });
 
 // Online status check
